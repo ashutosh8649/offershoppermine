@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpModule } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { SharedComponent } from './shared/shared.component';
@@ -21,6 +22,7 @@ import { UserSideBarComponent } from './user-profile/user-side-bar/user-side-bar
 import { UserContentComponent } from './user-profile/user-content/user-content.component';
 import { LocationComponent } from './shared/header/location/location.component';
 import { RelatedOffersService } from './services/related-offers.service';
+import { ProductPageComponent } from './product-page/product-page.component';
 
 
 
@@ -44,11 +46,18 @@ import { RelatedOffersService } from './services/related-offers.service';
     UserSideBarComponent,
     UserContentComponent,
     LocationComponent,
+    ProductPageComponent
   ],
   imports: [
     BrowserModule
   ],
-  providers: [RelatedOffersService],
+  providers: [
+      RelatedOffersService,
+      HttpModule,
+      FormsModule,
+      ReactiveFormsModule
+     ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
