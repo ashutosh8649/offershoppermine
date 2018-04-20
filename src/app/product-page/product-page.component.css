@@ -52,7 +52,7 @@
 
 .textWithblurredImage :not(img){
   position: absolute;
-  font-size: 2em;
+  font-size: 1em;
   top:30%;
   z-index: 1;
   color: #fff;
@@ -74,7 +74,7 @@
   color: orange;
   font-size: 1.5em;
 }
-.round{
+#b1{
     width: 60%;
     top: 55%; 
     align-self: center;
@@ -84,7 +84,6 @@
     text-align: center;
     text-decoration: none;
     font-size: 1em;
-    margin: 4px 2px;
-    margin-left: 50px;
+    left: 20%;
 }
 

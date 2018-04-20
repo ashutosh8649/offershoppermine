@@ -11,17 +11,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class ProductPageComponent implements OnInit {
 
-public offerList=[];
-public newOfferList=[];
+public offerList:any=[];
 
   constructor(private relatedOffersService: RelatedOffersService) { }
 
-  // ngOnInit() {
-  // 	this.relatedOffersService.getOffers().subscribe(res=>{
-  // 		this.offerList=res.offerList;
+  ngOnInit() {
+    this.getSubscription();
 
-  //  	});
-  // }
+  }
 
-ngOnInit() {}
+  getSubscription(){
+     this.relatedOffersService.getOffers().subscribe(res=>{
+      
+      console.log(res);
+      this.offerList=res;
+
+      
+     },
+     error=>{alert("inside error")
+   });
+  }
+
 }
+
+

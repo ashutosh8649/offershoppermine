@@ -49,15 +49,15 @@ import { ProductPageComponent } from './product-page/product-page.component';
     ProductPageComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    //RouterModule.forRoot(routes),
+    HttpModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
+  bootstrap: [AppComponent],
   providers: [
-      RelatedOffersService,
-      HttpModule,
-      FormsModule,
-      ReactiveFormsModule
-     ],
-
-  bootstrap: [AppComponent]
+     RelatedOffersService
+  ]
 })
 export class AppModule { }

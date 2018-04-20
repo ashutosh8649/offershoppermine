@@ -7,17 +7,22 @@ import 'rxjs/add/operator/map';
 export class RelatedOffersService {
 
   constructor(private http : Http) { }
+  public results:any
 
-  // public getUrl='10.151.60.93:8800/search-key/nike';
-  // getOffers(){
-  // 	return this.http.get(this.getUrl)
-  // 	.map(data=>data.json(),
-  // 		(error:any)=>this.handleError(error));
+  private headers = new Headers({ 'Content-Type': 'application/json'});
 
-  // }
+  public getUrl="http://localhost:9005/subscribe/get";//if http is not given cross origin error will come
+  getOffers(){
 
-  //  private handleError(error: Response){
-  //    return Observable.throw(error.statusText);
-  //  }
+  this.results=this.http.get(this.getUrl)
+    .map(data=> data.json(), error=>this.handleError(error));
+    return this.results;
+  }
+
+   private handleError(error: Response){
+     console.log("error in getting data from database");
+     return Observable.throw(error.statusText);
+   }
 
 }
+
