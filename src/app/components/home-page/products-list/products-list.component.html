@@ -1,0 +1,23 @@
+<div class="mx-5">
+    <div class="card-deck mx-5 my-3" *ngIf="offers">
+      <div *ngFor="let offer of offers">
+        {{productPrice(offer.originalPrice,offer.discount)}}
+        <span [routerLink]="['/', 'product',offer.userId,offer.offerId]">
+          <div class="card mx-2 my-3 card-w">
+            <img class="card-img-top img-fluid" src="http://www.freepngimg.com/download/special_offer/6-2-special-offer-png.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title text-heading">{{offer.offerTitle}}</h5>
+              <p class="card-text text-lead ">
+                <span class="text-heading"></span>
+                <span class="originalPrice mx-1">Rs. {{offer.originalPrice}}</span>
+                <span class="mx-1">{{offer.discount}}% discount</span>
+                <span>₹{{priceAfterDiscount}}</span>
+              </p>
+              <p class="card-text "><small class="text-muted">Last updated 45 mins ago</small></p>
+            </div>
+          </div>
+        </span>
+        </div>
+    </div>
+  </div>
+  

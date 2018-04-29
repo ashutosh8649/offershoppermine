@@ -14,7 +14,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
+### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
@@ -31,11 +31,11 @@ User profile      			- Rajneesh
 
 Header and Footer 			- Girish
 
-Search boxes & Vendor Page		-
+Search boxes & Vendor Page		- Anish
 
-Search Results & Pagination 		- Vishruty
+Search Results & Pagination 		- Nikhil KK
 
-Contact Page & Search Page Side Bar 	-
+Contact Page & Search Page Side Bar - Vishruty
 
 Carry Bag Page & Component 		- Anand
 
@@ -45,9 +45,9 @@ Login & Register Component 		- Dinesh
 
 Vendor related Services Component 	-
 
-Product Page Description Component	-
+Product Page Description Component	- Yashika
 
-Product Page Images Component		-
+Product Page Images Component		- Pooja
 			
 Related Products Component 		- Ashutosh Mishra
 
