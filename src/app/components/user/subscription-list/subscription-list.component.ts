@@ -30,6 +30,7 @@ export class SubscriptionListComponent implements OnInit {
 
   ngOnInit() {
     this.getUserId();
+    this.getAllSubscriptions(this.user);
   }
   getAllSubscriptions(user){
     console.log(user);

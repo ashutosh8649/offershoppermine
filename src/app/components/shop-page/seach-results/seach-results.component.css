@@ -26,6 +26,11 @@
 	color: #999;
 }
 
-.card:hover {
-	cursor: pointer;
+.card-footer-button-group {
+	width: 100%
+}
+
+.card-footer-button-group button {
+	width: 50%;
+	border-radius: 4px !important;
 }

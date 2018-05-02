@@ -1,6 +1,3 @@
-
-
-
   <!--Login-register-front-page-->
   <div class="py-5 loginContainer" [hidden]="IsNotHidden">
     <div class="container">
@@ -32,10 +29,9 @@
             </div>
               </div>
               <div class="form-group">
-
                 <a class="text-pride" routerLink="/forgot-password">Forgot Password</a>
               </div>
-              <button type="submit" class="btn btn-secondary" [disabled]="loginForm.invalid" (click)="login()">Login</button>
+              <button type="button" class="btn btn-secondary" [disabled]="loginForm.invalid" (click)="login()">Login</button>
             </form>
           </div>
         </div>
@@ -44,9 +40,6 @@
             <h1 class="mb-4">Register</h1>
                        <form [formGroup]="registerForm">
               <div class="form-group">
-
-
-
                 <label>Username</label>
                 <input  type="email" formControlName="username" class="form-control" placeholder="Enter email">
                  <div  class="alert-msg" *ngIf="registerForm.get('username').touched && isAlredyExist"> Already present! </div>

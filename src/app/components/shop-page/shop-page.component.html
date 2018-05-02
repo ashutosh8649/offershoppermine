@@ -3,8 +3,8 @@
 
 
 <!-- results component being called -->
-<div class="container">
-  <div class="row">
+<div class="container-fluid">
+  <div class="row ml-1">
     <div class="col-2">
       <!-- dropdown for sorting -->
 
@@ -22,19 +22,23 @@
   
       </div>
     </div>
+    <br>
     <!-- end -->
 
     <!-- filters -->
 
+    <!-- discount filter -->
+
+    <h5>Filter discounts</h5>
     <ion-range-slider #sliderElement
           type="double"
           max="100"
           min="0"
-          from="10"
+          from="0"
           from_min="0"
           from_max="90"
           from_shadow="true"
-          to="70"
+          to="100"
           to_min="10"
           to_max="100"
           to_shadow="true"
@@ -43,13 +47,14 @@
           prefix="Discount: "
           postfix="%"
           decorate_both="false"
-          (onChange)="myOnChange($event)">
+          (onFinish)="onFinish($event)">
         </ion-range-slider>
+
     <!-- end -->
 
     </div>
     <div class="col-10">
-      <app-seach-results [results]="results"></app-seach-results>
+      <app-seach-results  [results]="filteredResults"></app-seach-results>
     </div>
   </div> 
 </div>

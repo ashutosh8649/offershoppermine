@@ -34,11 +34,10 @@ export class ProductDetailService {
      (error: any)=>console.log("error in getting data from database"));
  }
 
- searchRelatedProducts(category){
-   return this.http.get(Product.reletedProductsUrl+category, this.options)
+  searchRelatedProducts(category){
+   return this.http.get(Product.relatedProductsUrl+category, this.options)
       .map(data => data.json(),
      (error: any)=>console.log("error in getting data from database"));
  }
-
 
  }

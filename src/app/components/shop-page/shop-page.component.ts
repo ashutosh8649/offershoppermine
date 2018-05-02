@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SearchService } from '../../../services/search.service';
-import { Product } from '../../../configs/product.config';
+import { SearchService } from '../../services/search.service';
+import { Product } from '../../configs/product.config';
 
 @Component({
   selector: 'app-shop-page',
@@ -14,10 +14,11 @@ export class ShopPageComponent implements OnInit {
     private route: ActivatedRoute,
     private searchService : SearchService ) { }
 
-  private category: string;
-  private searchKey: string;
+  private category: string = "";
+  private searchKey: string = "";
   //results retrieved from searching
   private results : any = [];  
+  private filteredResults : any = [];
   
   ngOnInit() {   
     this.route.paramMap.subscribe(params => {
@@ -39,6 +40,7 @@ export class ShopPageComponent implements OnInit {
     this.searchService.searchProducts(this.searchKey)
     .subscribe(res => {
       this.results = res;
+      this.filteredResults = this.results;
     });
     }  
 
@@ -46,6 +48,7 @@ export class ShopPageComponent implements OnInit {
     this.searchService.searchProductsCategoryOnly(this.category)
     .subscribe(res => {
       this.results = res;
+      this.filteredResults = this.results;
     });
   }
   //search by both category and key
@@ -53,6 +56,7 @@ export class ShopPageComponent implements OnInit {
     this.searchService.searchProductsCategoryAndKey(this.category, this.searchKey)
     .subscribe(res => {
       this.results = res;
+      this.filteredResults = this.results;
     });
     
     }
@@ -62,21 +66,21 @@ export class ShopPageComponent implements OnInit {
   sortBy(x) {
     switch (x) {
       case "priceLH":
-        this.results.sort(this.sorters.byPrice);
+        this.filteredResults.sort(this.sorters.byPrice);
         break;
 
       case "priceHL":
-        this.results.sort(this.sorters.byPrice);
-        this.results.reverse();
+        this.filteredResults.sort(this.sorters.byPrice);
+        this.filteredResults.reverse();
         break;
 
       case "discountLH":
-        this.results.sort(this.sorters.byDiscount);
+        this.filteredResults.sort(this.sorters.byDiscount);
         break;
 
       case "discountHL":
-        this.results.sort(this.sorters.byDiscount);
-        this.results.reverse();
+        this.filteredResults.sort(this.sorters.byDiscount);
+        this.filteredResults.reverse();
         break;
     }
   }
@@ -92,8 +96,8 @@ export class ShopPageComponent implements OnInit {
   };
 
   //whenever filter is changed
-  onMyChange(event) {
-    this.results.filter((product)=> product.discount > event.from && product.discount < event.to);
+  onFinish(event) {
+    this.filteredResults = this.results.filter((results)=> results.discount > event.from && results.discount < event.to);
   }
 
 }

@@ -1,6 +1,6 @@
 export class Carrybag{
 
-	public static getCarryBagUrl="http://10.151.61.152:8765/api/carry-bag-database-service/bag/userId/";
+	public static getCarryBagUrl='http://10.151.61.152:8765/api/uservendor-activity-service/update';
 	public static deleteCarryBagUrl="http://10.151.61.152:8765/api/carry-bag-database-service/bag/userId/";
 
 	public static generateCouponUrl="http://10.151.61.152:8765/api/feedback-database-service/os/addfeedback";

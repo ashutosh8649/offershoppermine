@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AddOfferService } from '../../../services/add-offer.service';
 import { FormsModule} from '@angular/forms';
+import { AuthorizationService } from '../../../services/authorization.service';
 
 @Component({
 	selector: 'app-add-offer',
 	templateUrl: './add-offer.component.html',
 	styleUrls: ['./add-offer.component.css'],
-	providers:[ AddOfferService ]
+	providers:[ AddOfferService,AuthorizationService ]
 })
 
 export class AddOfferComponent implements OnInit {
@@ -27,29 +28,43 @@ export class AddOfferComponent implements OnInit {
 	zipCode:any;
 	name:String;
 	number:String;
-	offerRating:String;
+	offerRating:any;
 	coupon:number;
+	public userInfo;
+	shopAddress:any;
 
 	obj={};
+	toRedis={};
 	User:any={};
 
 	date = new Date();
 
-	constructor(private addOfferService: AddOfferService) { }
+	constructor(private addOfferService: AddOfferService,
+		private authorizationService: AuthorizationService) { }
 
 	ngOnInit()
 	{
-		this.getOffers();
+		this.getUserId();
+
 	}
+
+
+	getUserId() {
+		this.authorizationService.getUserId().subscribe((res) =>{
+		  this.userInfo = res.text().split(',');
+		  this.userId = this.userInfo[2];
+		  this.getOffers(this.userId);
+		}, (error) =>{
+		})
+	  }
 
 	public offers=[];
 
-	getOffers() {
+	getOffers(userId) {
 
-		this.addOfferService.getOffersList().subscribe((res) =>{
+		this.addOfferService.getOffersList(userId).subscribe((res) =>{
 
 			this.offers = res;
-			console.log(this.offers);
 		}
 		, (error) =>{console.log("error");
 	})
@@ -57,7 +72,7 @@ export class AddOfferComponent implements OnInit {
 
 	deleteOffer(offerId){
 		this.addOfferService.deleteOffer(offerId).subscribe((res) =>{
-			this.getOffers();
+			this.getOffers(this.userId);
 		}, (error) =>{
 			alert(error + "deleting restaurant does not works");
 		})
@@ -72,7 +87,7 @@ export class AddOfferComponent implements OnInit {
 		this.offerDescription="";
 		this.originalPrice="";
 		this.discount="";
-		this.offerRating="";
+		this.offerRating=0.0;
 		this.offerCategories="";
 		this.offerTerms="";
 		this.keywords="";
@@ -112,66 +127,66 @@ export class AddOfferComponent implements OnInit {
 			"imageURL":"image_url"
 		}
 		this.addOfferService.putOffer(this.obj).subscribe((res) =>{
-			this.getOffers();
+			this.getOffers(this.userId);
 			this.reset();
 		}, (error) =>{
 
 		})
 
-		let carryBagObj={
+	}
 
-			"offerId" :this.User.offerId,
-			"offerImage":"image_url",
-			"offerTitle" :this.offerTitle,
-			"offerOriginalPrice" :this.originalPrice,
-			"offerDiscount" :this.discount,
-			"offerValidity" :this.offerValidity,
-			"vendorId":this.User.userId
-
-		}
-		this.addOfferService.putOffersInCarryBag(carryBagObj).subscribe((res) =>{
-			this.getOffers();
-			this.reset();
+	getOffer(){
+		this.addOfferService.getShopAddress(this.userId).subscribe((res) =>{
+			this.shopAddress=res.shopAddress;
+			this.addOffer();
 		}, (error) =>{
-
+			console.log(error);
 		})
 
 	}
 
 	addOffer(){
 		let time = "T"+this.date.getHours()+":"+this.date.getMinutes()+":"+this.date.getSeconds()+"Z";
+		time = this.offerValidity+time;
+		console.log("dateOfAnnouncement: "+this.offers[0].dateOfAnnouncement);
+		console.log("Expected format: 2018-04-24T04:34:31.660Z");
 		this.obj={
-			"userId"  :this.offers[0].userId,
+			"userId"  :this.userId,
 			"offerTitle" :this.offerTitle,
-			"offerValidity" :this.offerValidity+time,
-			"dateOfAnnouncement" :this.offers[0].dateOfAnnouncement,
-			"address" :this.offers[0].address,
+			"offerValidity" :time,
+			"dateOfAnnouncement" :this.offers[0].dateOfAnnouncement+"0Z",
+			"address" :this.shopAddress,
 			"offerDescription" :this.offerDescription,
 			"originalPrice" :this.originalPrice,
 			"discount" :this.discount,
-			"offerRating" :0,
+			"offerRating" :0.0,
 			"offerCategories" :this.offerCategories,
 			"offerTerms" :this.offerTerms,
 			"keywords" :this.keywords
 		}
-		console.log(this.obj);
+
 		this.addOfferService.addNewOffer(this.obj).subscribe((res) =>{
-			this.getOffers();
-			console.log("Success:");
-			console.log(res);
+			this.getOffers(this.userId);
 		}, (error) =>{
 			console.log("Error:");
 			console.log(error);
 		})
+
+		this.toRedis={
+				 "keywords":this.keywords 
+				}
+			 this.addOfferService.addToRedis(this.toRedis).subscribe((res) =>{ }, (error) =>{
+			  })
+
 	}
+
 couponValidate()
 {
 
-	this.addOfferService.couponValidateService(this.coupon).subscribe((res) =>{
+	this.addOfferService.couponValidateService(this.coupon,this.userId).subscribe((res) =>{
 
-		debugger
 		let couponData = res;
-		//alert(couponData);
+
 		if(couponData==null) {
 			alert("wrong coupon entered");
 		}
@@ -180,14 +195,14 @@ couponValidate()
 				"couponId" : couponData.couponId,
 				"userId" : couponData.userId,
 				"offerId" : couponData.offerId,
+				"vendorId" : couponData.vendorId,
 				"rating" : couponData.rating,
-				//"feedback" : couponData.feedback,
 				"vendorValidationFlag" : true
 			}
-
 			this.addOfferService.changeFlag(obj).subscribe((res) =>{
-				let responseMessage = res;
-				alert(responseMessage);
+				alert("coupon verified");
+
+
 
 
 			}, (error) =>{

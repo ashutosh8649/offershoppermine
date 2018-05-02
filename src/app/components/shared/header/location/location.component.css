@@ -1,4 +1,37 @@
-.location{
-	background-color: #018b8b;
-	text-align:center;
+
+#_location {
+	font-family: 'Julius Sans One', sans-serif;
+	color:white;
+	font-size: 1rem;
+	font-weight: bold;
+	padding-top: .50rem;
+	padding-right: .50rem;
+
+}
+#_location1
+{
+	font-family: 'Poiret One', cursive;
+	text-transform: uppercase;
+	letter-spacing: 0.25rem;
+	font-weight: bold;
+	font-variant-caps: titling-case;
+	color:white;
+	border:none;
+	background-color: transparent;
+}
+
+.nav {
+    background: black;
+}
+.locationimg
+{
+	height: 1rem;
+	width: 1rem;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+#Modallabel
+{
+	font-family: 'Julius Sans One', sans-serif;
 }

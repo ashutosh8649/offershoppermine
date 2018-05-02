@@ -23,7 +23,7 @@ export class SubscribeService {
     (error: any)=>console.log("error in getting data from database"));
 
   }
-
+  
   deleteSubscriptionsById(userId,vendorId) {
   	return this.http.delete(Subscribe.deleteCarryBagUrl+userId+"/"+vendorId, this.options)
     .map(data => data.status,
@@ -33,8 +33,7 @@ export class SubscribeService {
   addToSubscriptionList(subscribeBean){
         return this.http.post(Subscribe.addSubscriptionUrl,subscribeBean, this.options)
     .map(data => data.status,
-    (error: any)=>console.log(error + "error in deleting offer"));
+    (error: any)=>console.log(error + "error in adding offer"));
   }
-
 
 }

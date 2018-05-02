@@ -39,7 +39,7 @@ export class CarrybagService {
    (error: any)=>console.log("error"));
  }
 
- validateCoupon(userId,offerId){
+ checkCouponExistence(userId,offerId){
   return this.http.get(Carrybag.getCouponIdUrl+"userId/"+userId+"/offerId/"+offerId)
   .map(data => data.json(),
   (error: any)=>console.log("error in getting data from database"));

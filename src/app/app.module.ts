@@ -42,10 +42,12 @@ import { UpdatePasswordComponent } from './components/update-password/update-pas
 import { VerifyEmailService } from './services/verify-email.service';
 import { VendorRegisterComponent } from './components/vendor-register/vendor-register.component';
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
-import { ShopPageComponent } from './components/home-page/shop-page/shop-page.component';
-import { SeachResultsComponent } from './components/home-page/shop-page/seach-results/seach-results.component';
-import { SearchBarComponent } from './components/home-page/shop-page/search-bar/search-bar.component';
+import { ShopPageComponent } from './components/shop-page/shop-page.component';
+import { SeachResultsComponent } from './components/shop-page/seach-results/seach-results.component';
+import { SearchBarComponent } from './components/shop-page/search-bar/search-bar.component';
 import { HelpComponent } from './components/help/help.component';
+import { LocationService } from './services/location.service';
+import { LoginService } from './services/login.service';
 
 const appRoutes:Routes=[
 
@@ -65,7 +67,7 @@ const appRoutes:Routes=[
   //{path:'',redirectTo:'/sidebar' ,pathMatch:'full'},
   //{path:'**',redirectTo:'/sidebar' ,pathMatch:'full'}
   { path:'search/:id1/:id2',component: ShopPageComponent},
-    { path:'search',component: ShopPageComponent}
+  { path:'search',component: ShopPageComponent}
 ]
 
 @NgModule({
@@ -112,7 +114,7 @@ const appRoutes:Routes=[
      apiKey: 'AIzaSyBeSuJbAPirjvZ0mEDxd-g05P5_f6gkAlQ'
    })
   ],
-  providers: [UserService, WishlistService, CarrybagService, SearchService, OffersService, AuthorizationService, VerifyEmailService,UpdatePasswordService],
+  providers: [UserService, WishlistService, CarrybagService, SearchService, OffersService, AuthorizationService, VerifyEmailService,UpdatePasswordService, LocationService,  LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

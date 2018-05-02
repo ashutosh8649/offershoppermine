@@ -12,8 +12,15 @@
         placeholder="Search for your favorite deals here" aria-label="Search">
         <!-- search button -->
         <!-- on click of button show values for category and field-->
-          <button id="searchButton" [routerLink] ="['/search/',category,query]" type="button" (click)="showValue()" class="btn btn-light search-btn col-md-1 col-sm-1 col-lg-2"><i class="fas fa-search"></i></button>
+          <button id="searchButton" [routerLink] ="['/search/',category,query]" type="button"  class="btn btn-light search-btn col-md-1 col-sm-1 col-lg-2"><i class="fas fa-search"></i></button>
       </form>
     </nav>
   </div>
 </div>
+
+<!-- associating data list with the search query -->
+<datalist id="suggestions">
+  <option *ngFor="let result of results| slice:0:9">
+    {{result}}
+  </option>
+</datalist>

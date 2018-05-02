@@ -1,2 +1,30 @@
-<app-location></app-location>
-<app-navbar></app-navbar>
+<!-- Modal -->
+ <div class="modal fade" id="Modal" role="dialog">
+  <div class="modal-dialog">
+   <!-- Modal content-->
+   <div class="modal-content">
+    <div class="modal-header">
+      <!--           <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+      <h4 class="modal-title">Change your City</h4>
+    </div>
+    <!--         this is for body for dropdown to select city-->
+    <div class="modal-body">
+      <select [(ngModel)]="selected.a">
+       <option *ngFor=" let city of cities" value={{city}}>{{city}}</option>
+     </select>
+   </div>
+   <p>{{selected.a}}</p>
+   <div class="modal-footer">
+    <span>
+      <button type="button" class="btn btn-default " data-dismiss="modal"  (click)="fav(selected)">Skip</button>         <button type="button" class="btn btn-default " data-dismiss="modal">Continue</button>
+    </span>
+  </div>
+</div>
+</div>
+</div>
+
+
+<div class="sticky-top">
+	<app-location [obj]="selected"></app-location>
+	<app-navbar></app-navbar>
+</div>

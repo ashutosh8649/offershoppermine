@@ -32,7 +32,7 @@ export class AuthorizationService {
 	getUserId(){
 		let token=localStorage.getItem("application-token");
 		return this.http.get("http://10.151.61.152:8765/api/uaa-server/verifytoken/"+token)
-		.map((res:Response) =>res,(error: any)=>error.json());
+		.map((res:Response) =>res,(error: any)=>console.log("error"+error));
 	}
 
 	logout() {

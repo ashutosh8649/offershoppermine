@@ -11,10 +11,10 @@ import { AuthorizationService } from '../../services/authorization.service';
 })
 export class UserComponent implements OnInit {
 
-  public userList;
-  public login;
-  public userInfo;
-  public role;
+  private userList;
+  private login;
+  private userInfo;
+  private role;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +44,7 @@ export class UserComponent implements OnInit {
     this.authorizationService.getUserId().subscribe((res) =>{
       this.userInfo = res.text().split(',');
       this.role = this.userInfo[1];
+      console.log(res.text());
     }, (error) =>{
     })
   }

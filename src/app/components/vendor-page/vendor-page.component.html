@@ -1,7 +1,18 @@
-<div class="d-flex justify-content-around my-4">
-  <h2 class=" my-5 text-secondary">{{shopName}}</h2>
-  <button class="btn btn-primary my-5" id="subscribe" >Subscribe</button>
-</div>
+
+<div *ngIf="user; else elseblock1;then thenblock1;"></div>
+<ng-template #thenblock1>
+  <div class="d-flex justify-content-around my-4">
+    <h2 class=" my-5 text-secondary">{{shopName}}</h2>
+    <button class="btn btn-primary my-5" (click)="subscribe()" >Subscribe</button>
+  </div>
+</ng-template>
+<ng-template #elseblock1>
+  <div class="d-flex justify-content-around my-4">
+    <h2 class=" my-5 text-secondary">{{shopName}}</h2>
+    <button class="btn btn-primary my-5" (click)="notLogin()">Subscribe</button>
+  </div>
+</ng-template>
+
 
 <div class="container d-flex justify-content-center">
   <div class="row col-12 d-flex justify-content-center">

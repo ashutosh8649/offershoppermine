@@ -1,49 +1,59 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-3">
-      <ul class="nav nav-pills flex-column">
-        <li class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'userdetails']" style="vertical-align:middle">
-          <span>Personal Information</span>
-        </li>
-        <li class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'carrybag']">
-          Carry Bag
-        </li>
-        <li class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'wishlist']">
-          Wish List
-        </li>
-        <li class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'subscriptionlist']">
-          Subscriptions
-        </li>
-        <li *ngIf="role=='vendor'" class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'add-offer']">
-          Add Offers
-        </li>
-        <li *ngIf="role=='customer'" class="btn btn-light sidebar-text d-flex justify-content-center" [routerLink]="['/user', 'userdetails']">
-          Be a Seller
-        </li>
-      </ul>
+<div class="user-sidebar border-right d-flex justify-content-center mt-2">
+  <ul class="nav nav-pills flex-column ">
+    <li class="text-center active" *ngIf="userList=='userdetails'" [routerLink]="['/user', 'userdetails']">
+      Personal Information
+    </li>
+    <li class="text-center border-bottom py-2" *ngIf="userList!='userdetails'" [routerLink]="['/user', 'userdetails']">
+      Personal Information
+    </li>
+    <li class="text-center active" *ngIf="userList=='carrybag'" [routerLink]="['/user', 'carrybag']">
+      Carry Bag
+    </li>
+    <li class="text-center border-bottom py-2" *ngIf="userList!='carrybag'" [routerLink]="['/user', 'carrybag']">
+      Carry Bag
+    </li>
+    <li class="text-center active" *ngIf="userList=='wishlist'" [routerLink]="['/user', 'wishlist']">
+      Wish List
+    </li>
+    <li class="text-center border-bottom py-2" *ngIf="userList!='wishlist'" [routerLink]="['/user', 'wishlist']">
+      Wish List
+    </li>
+    <li class="text-center active" *ngIf="userList=='subscriptionlist'" [routerLink]="['/user', 'subscriptionlist']">
+      Subscriptions
+    </li>
+    <li class="text-center border-bottom py-2" *ngIf="userList!='subscriptionlist'" [routerLink]="['/user', 'subscriptionlist']">
+      Subscriptions
+    </li>
+    <li *ngIf="role=='Vendor' && userList=='add-offer'" class="text-center active" [routerLink]="['/user', 'add-offer']">
+      Add Offers    
+    </li>
+    <li *ngIf="role=='Vendor' && userList!='add-offer'" class="text-center border-bottom py-2" [routerLink]="['/user', 'add-offer']">
+      Add Offers   
+    </li>
+    <li *ngIf="role=='Customer'" class="text-center border-bottom py-2" [routerLink]="['/user', 'userdetails']">
+      Be a Seller
+    </li>
+  </ul>
+</div>
+<div class="user-content">
+  <div [ngSwitch]="userList">
+    <div *ngSwitchCase="'userdetails'">
+      <app-userdetails></app-userdetails>
     </div>
-    <div class="col-9">
-      <div [ngSwitch]="userList">
-        <div *ngSwitchCase="'userdetails'">
-          <app-userdetails></app-userdetails>
-        </div>
-        <div *ngSwitchCase="'carrybag'">
-          <app-carrybag></app-carrybag>
-        </div>
-        <div *ngSwitchCase="'wishlist'">
-          <app-wishlist></app-wishlist>
-        </div>
-        <div *ngSwitchCase="'subscriptionlist'">
-          <app-subscription-list></app-subscription-list>
-        </div>
-        <div *ngSwitchCase="'add-offer'">
-          <app-add-offer></app-add-offer>
-        </div>
-      </div>
+    <div *ngSwitchCase="'carrybag'">
+      <app-carrybag></app-carrybag>
+    </div>
+    <div *ngSwitchCase="'wishlist'">
+      <app-wishlist></app-wishlist>
+    </div>
+    <div *ngSwitchCase="'subscriptionlist'">
+      <app-subscription-list></app-subscription-list>
+    </div>
+    <div *ngSwitchCase="'add-offer'">
+      <app-add-offer></app-add-offer>
     </div>
   </div>
 </div>
-
 
 
 

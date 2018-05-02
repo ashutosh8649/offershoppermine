@@ -61,6 +61,7 @@ export class VendorPageComponent implements OnInit {
     this.offersService.getOffers(this.vendorId).subscribe((res) =>{
       this.offersList = res;
       this.data = res;
+      console.log(this.data);
       this.shopName=this.data[0].address.name.toUpperCase()
       this.street=this.data[0].address.street.toUpperCase();
       this.city=this.data[0].address.city.toUpperCase();
@@ -104,9 +105,10 @@ export class VendorPageComponent implements OnInit {
   subscribe(){
     let subscribeBean={
       "userId":this.user,
-      "vendorId":this.data.userId,
-      "category":this.data.offerCategories
+      "vendorId":this.vendorId,
+      "shopName":this.shopName,
     }
+    console.log(subscribeBean);
     this.subscribeService.addToSubscriptionList(subscribeBean).subscribe((res) =>{
       this.messageService.showSuccessToast(this._vcr,"Added to Subscription List");
     },(error) =>{

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import{UserService} from './../../../services/user.service';
 import {FormsModule} from '@angular/forms';
 import { AuthorizationService } from '../../../services/authorization.service';
-
+import { Router } from '@angular/router';
 import {States} from '../../../configs/state.config';
 import {Cities} from '../../../configs/cities.config';
 
@@ -15,6 +15,7 @@ import {Cities} from '../../../configs/cities.config';
 export class UserdetailsComponent implements OnInit {
 
   constructor(private userdata:UserService,
+    private router: Router,
     private authorizationService: AuthorizationService) { }
   states= States.states;
   cities=Cities.citiesName;
@@ -54,6 +55,9 @@ export class UserdetailsComponent implements OnInit {
 
   getUserId() {
     this.authorizationService.getUserId().subscribe((res) =>{
+      if(res.text() == "UnAuthorized"){
+			     this.router.navigate(['/login']);
+      }
       this.userInfo = res.text().split(',');
       this.userId = this.userInfo[2];
       this.getProfile(this.userId);

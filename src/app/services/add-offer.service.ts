@@ -9,21 +9,22 @@ export class AddOfferService {
 
 	private header;
   options:RequestOptions;
+  public userInfo;
+  public userId;
 
   constructor(private http: Http) {
 		this.header = new Headers();
 		this.header.append('Authorization', localStorage.getItem("application-token"));
-		this.options = new RequestOptions({headers: this.header});
-	}
-
-  getOffersList(){
-    return this.http.get(AddOfferConfig.getURL+"megha@gmail.com/offers", this.options)
+    this.options = new RequestOptions({headers: this.header});
+  }
+  
+  getOffersList(userId){
+    return this.http.get(AddOfferConfig.getURL+userId+"/offers", this.options)
     .map(data => data.json(),
-    (error: any)=>console.log("error in getting data from database"));
-
+     (error: any)=>console.log("error in getting data from database")); 
   }
 
-deleteOffer(offerId) {
+  deleteOffer(offerId) {
   	return this.http.delete(AddOfferConfig.deleteOfferURL+offerId,this.options)
     .map(data => data.status,
     (error: any)=>console.log(error + "error in deleting offer"));
@@ -37,7 +38,7 @@ deleteOffer(offerId) {
 
   putOffer(obj){
 
-   return this.http.put(AddOfferConfig.updateOfferURL+obj.offerId,obj, this.options)
+   return this.http.put(AddOfferConfig.updateOfferURL+obj.userId,obj, this.options)
     .map(data => data.json(),
   (error: any)=>console.log("error"));
  }
@@ -49,8 +50,14 @@ deleteOffer(offerId) {
   (error: any)=>console.log("error"));
 }
 
-couponValidateService(coupon){
-  return this.http.get(AddOfferConfig.validateCouponUrl+coupon, this.options)
+addToRedis(obj){
+   return this.http.post(AddOfferConfig.addToRedisURL,obj, this.options) 
+     .map(data => data.json(), 
+     (error: any)=>console.log("unable to add to redis")); 
+    }
+
+couponValidateService(coupon,vendorId){
+  return this.http.get(AddOfferConfig.validateCouponUrl+coupon+"/vendorId/"+vendorId, this.options)
   .map(data => data.json(),
   (error: any)=>console.log("error in getting data from database"));
 }
@@ -65,6 +72,13 @@ putOffersInCarryBag(obj){
   return this.http.put(AddOfferConfig.updateOffersInCarryBag,obj, this.options)
   .map(data => data.json(),
 (error: any)=>console.log("error"));
+}
+
+
+getShopAddress(userId) {
+  return this.http.get(AddOfferConfig.getVendorDetailURL+userId, this.options)
+  .map(data => data.json(),
+  (error: any)=>console.log("error in getting data from database"));
 }
 
 

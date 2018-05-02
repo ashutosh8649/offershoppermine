@@ -2,6 +2,7 @@ footer {
     font-family: 'Poiret One';
     background: black;
     padding-left: 8rem;
+    position: relative;
 }
 
 a {

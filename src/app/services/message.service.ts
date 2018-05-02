@@ -20,9 +20,11 @@ export class MessageService {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
-    }).then(()=> {
-      if(callback){
-        callback();
+    }).then((result)=> {
+      if(result.value){
+        if(callback){        
+          callback();
+        }
       }
     }).catch(cancel=>{
     })

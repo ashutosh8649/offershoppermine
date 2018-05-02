@@ -31,8 +31,6 @@ export class ProductPageComponent implements OnInit {
   public user : any;
   public category: any;
   public relatedProducts: any;
-  arr=[1,2,3];
-
   constructor(
     private productDetailService : ProductDetailService,
     private route: ActivatedRoute,
@@ -48,6 +46,7 @@ export class ProductPageComponent implements OnInit {
     this.vendorId=this.route.snapshot.params.id;
     this.offerId = this.route.snapshot.params.offerId;
     if( this.vendorId && this.offerId) {
+      alert(this.offerId)
       this.getOfferById();
     }
     else {
@@ -59,7 +58,6 @@ export class ProductPageComponent implements OnInit {
  searchProduct(){
    this.productDetailService.searchProduct(this.vendorId)
    .subscribe((res) =>{
-     
      this.offer=res[0];
      this.productName=res[0].offerTitle;
      this.productDescription=res[0].offerDescription;
@@ -67,7 +65,6 @@ export class ProductPageComponent implements OnInit {
      this.productOriginalPrice=res[0].originalPrice;
      this.productDiscount=res[0].offerDiscount;
      this.productSeller=res[0].userId;
-     this.category=res[0].offerCategories;
      console.log(res[0].offerTitle);
    },(error) =>{
 
@@ -86,9 +83,8 @@ export class ProductPageComponent implements OnInit {
      this.productOriginalPrice=res.originalPrice;
      this.productDiscount=res.discount;
      this.category=res.offerCategories;
+     
      this.searchRelatedProducts(this.category);
-
-
    },(error) =>{
 
    });
@@ -115,8 +111,9 @@ export class ProductPageComponent implements OnInit {
      "offerValidity":offer1.offerValidity
    }
    this.wishlistService.addToWishlist(wishlistBean).subscribe((res) =>{
-     this.messageService.showSuccessToast(this._vcr,"Added");
+     this.messageService.showSuccessToast(this._vcr,"Added in wishlist");
    },(error) =>{
+     this.messageService.showErrorToast(this._vcr,"Already added to wishlist");
    })
  }
 
@@ -132,8 +129,9 @@ export class ProductPageComponent implements OnInit {
      "vendorId":offer1.userId
    }
    this.carrybagService.addToCarrybag(carrybagBean).subscribe((res) =>{
+     this.messageService.showSuccessToast(this._vcr,"Added in carrybag");
    },(error) =>{
-     this.messageService.showSuccessToast(this._vcr,"Added");
+     this.messageService.showErrorToast(this._vcr,"Already added to carrybag");
    })
  }
 
@@ -142,4 +140,5 @@ export class ProductPageComponent implements OnInit {
      this.relatedProducts=res;
    },(error)=>{})
  }
+
 }

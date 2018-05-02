@@ -1,8 +1,8 @@
 import { Component, OnInit, Input,ViewContainerRef  } from '@angular/core';
-import { AuthorizationService } from '../../../../services/authorization.service';
-import { MessageService } from '../../../../services/message.service';
-import { WishlistService } from '../../../../services/wishlist.service';
-import { OffersService } from '../../../../services/offers.service';
+import { AuthorizationService } from '../../../services/authorization.service';
+import { MessageService } from '../../../services/message.service';
+import { WishlistService } from '../../../services/wishlist.service';
+import { OffersService } from '../../../services/offers.service';
 @Component({
 	selector: 'app-seach-results',
 	templateUrl: './seach-results.component.html',
@@ -12,7 +12,8 @@ import { OffersService } from '../../../../services/offers.service';
 export class SeachResultsComponent implements OnInit {
 	public userInfo : any;
 	public user : any;
-
+	private priceAfterDiscount;
+	
 	@Input() results;
 
 	constructor(private wishlistService:WishlistService,
@@ -35,28 +36,31 @@ export class SeachResultsComponent implements OnInit {
 		})
 	}
 
+	productPrice(offerOriginalPrice,offerDiscount){
+		this.priceAfterDiscount = (offerOriginalPrice)*(1-(offerDiscount)/100);
+	}
+
 	addToWishlist(offer1) {
 		console.log(offer1);
 		console.log(offer1.offerId);
-    let wishlistBean = {
-      "userId":this.user,
-      "offerId":offer1.offerId,
-      "offerTitle":offer1.offerTitle,
-      "offerOriginalPrice":offer1.originalPrice,
-      "offerDiscount":offer1.discount,
-      "offerImage":"abcd",
-      "offerValidity":offer1.offerValidity
-    }
-    this.wishlistService.addToWishlist(wishlistBean).subscribe((res) =>{
-      this.messageService.showSuccessToast(this._vcr,"Added");
-    },(error) =>{
-    })
-  }
+		let wishlistBean = {
+			"userId":this.user,
+			"offerId":offer1.offerId,
+			"offerTitle":offer1.offerTitle,
+			"offerOriginalPrice":offer1.originalPrice,
+			"offerDiscount":offer1.discount,
+			"offerImage":"abcd",
+			"offerValidity":offer1.offerValidity
+		}
+		this.wishlistService.addToWishlist(wishlistBean).subscribe((res) =>{
+			this.messageService.showSuccessToast(this._vcr,"Added");
+		},(error) =>{
+		})
+	}
 
 	addToCarrybag(offer) {
 		let carrybagBean = {
 			"userId":this.user,
-
 			"offerId":offer.offerId,
 			"offerTitle":offer.offerTitle,
 			"offerOriginalPrice":offer.originalPrice,
@@ -68,6 +72,7 @@ export class SeachResultsComponent implements OnInit {
 		this.offersService.addToCarrybag(carrybagBean).subscribe((res) =>{
 			this.messageService.showSuccessToast(this._vcr,"Added to CarryBag");
 		},(error) =>{
+			this.messageService.showSuccessToast(this._vcr,"Already Added");
 		})
 	}
 
