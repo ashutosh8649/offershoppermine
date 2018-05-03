@@ -4,8 +4,9 @@ import { TestBed, inject, async } from '@angular/core/testing';
 import { ProductDetailService } from './product-detail.service';
 
 fdescribe('ProductDetailService', () => {
-  
-  beforeEach(() => {
+  let offerResult=null;
+
+  beforeEach(async() => {
     TestBed.configureTestingModule({
       providers: [ProductDetailService]
     });
@@ -18,7 +19,7 @@ fdescribe('ProductDetailService', () => {
 
   it('should return an offer', inject([ProductDetailService], (service: ProductDetailService) =>{
 service.getOfferById('offer-204').subscribe(results=>{
-	expect(results).toEqual('')
+	expect(results).toEqual("")
 }) 
 
 }));
