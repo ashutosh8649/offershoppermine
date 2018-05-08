@@ -1,22 +1,37 @@
 
-<div *ngIf="user; else elseblock1;then thenblock1;"></div>
-<ng-template #thenblock1>
-  <div class="d-flex justify-content-around my-4">
-    <h2 class=" my-5 text-secondary">{{shopName}}</h2>
-    <button class="btn btn-primary my-5" (click)="subscribe()" >Subscribe</button>
-  </div>
-</ng-template>
-<ng-template #elseblock1>
-  <div class="d-flex justify-content-around my-4">
-    <h2 class=" my-5 text-secondary">{{shopName}}</h2>
-    <button class="btn btn-primary my-5" (click)="notLogin()">Subscribe</button>
-  </div>
-</ng-template>
+<div class="container justify-content-center">
+  <!-- This shows the name and shop address of vendor and Subscribe button-->
+  <div *ngIf="user; else elseblock1;then thenblock1;"></div>
+  <ng-template #thenblock1>
+    <div class="row">
+      <div class="d-flex">
+        <div class="col-lg-12">
+          <h2 class="text-secondary my-5">{{shopName}}</h2>
+          <p class="text-secondary address">{{street}}, {{city}}, {{state}}, {{zip}}</p>
+        </div>
+        <div class="col-lg-12 text-right">
+          <button class="btn my-5 text-right btn-subs" (click)="subscribe()">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #elseblock1>
+    <div class="row">
+      <div class="d-flex">
+        <div class="col-lg-12">
+          <h2 class="text-secondary my-5">{{shopName}}</h2>
+          <p class="text-secondary address">{{street}}, {{city}}, {{state}}, {{zip}}</p>
+        </div>
+        <div class="col-lg-12 text-right">
+          <button class="btn my-5 text-right btn-subs mx-5" (click)="notLogin()">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 
-
-<div class="container d-flex justify-content-center">
-  <div class="row col-12 d-flex justify-content-center">
-    <div class="col-md-6 mb-2">
+  <!-- This will show the photos of vendor's shop -->
+  <div class="row">
+    <div class="col-md-6 my-1">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -44,124 +59,99 @@
         </a>
       </div>
     </div>
-    <div class="card col-md-6 mb-2">
-      <div class="card-header">{{shopName}}</div>
-      <div class="card-body text-dark">
-        <p class="card-text">{{street}}<br>{{city}}<br>{{state}}<br>Pin:-{{zip}}</p>
-        <p>
-          <agm-map class="map" [latitude]="lat" [longitude]="lng">
-            <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-          </agm-map>
-        </p>
-      </div>
+    <div class="col-md-6 my-1">
+      <agm-map class="map" [latitude]="lat" [longitude]="lng">
+        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+      </agm-map>
     </div>
   </div>
-</div>
 
-<div *ngIf="offersList.length">
-  <div class="container">
-    <div class="mb-2 description-container">
-      <div class="row">
-        <div class="col-md-2 col-sm-4 col-6">
-        </div>
-        <div class="col-md-5 col-sm-4 col-6 d-none d-sm-block text-left text-center">
-          <b>PRODUCT</b>
-        </div>
-        <div class="col-md-2 col-sm-4 d-none d-sm-block text-center">
-          <b>PRICE</b>
-        </div>
-        <div class="col-md-3 d-none d-md-block text-center">
-          <b>VALIDITY</b>
-        </div>
-      </div>
-    </div>
-    <div *ngFor=" let offerList of offersList?.reverse()">
-      <div class="container">
-        <div class="row mb-2  offer border show-offer-border text-center">
-          <div class="col-md-2">
-           <div class="card display-offer-image bg-white border-0">
-            <img class="card-img" src="../../assets/tab.jpg" alt="Card image">
-          </div>
-        </div>
-        <div class="col-md-5">
-          <b>{{offerList.offerTitle}}</b>
-          <p>{{offerList.offerDescription}}</p>
-        </div>
-        <div class="col-md-2">
-         <dl>
-          <dd class="offer-discount-large">{{offerList.discount}}% off</dd>
-          <dd><div class="text-before-del-large">MRP:</div><del>₹{{offerList.originalPrice}}</del>  ₹{{priceAfterDiscount}}</dd>
-          <dd></dd>
-        </dl>
-      </div>
-      <div class="col-md-3">
-        <div *ngIf="user; else elseBlock;then thenblock;"></div>
-        <ng-template #thenblock>
-         <div class="col-md-12 text-center">
-           {{offerList.offerValidity | date}}
-         </div> 
-         <div class="col-md-12 text-center">
-          <button type="button" class="btn btn-secondary" (click)="addToCarrybag(offerList)" >Add To CarryBag</button>
-        </div>
-        <div class="col-md-12 text-center"> 
-          <button type="button" class="btn btn-secondary" (click)="addToWishlist(offerList)" >Add to Wishlist</button>
-        </div>
-      </ng-template>
-
-
-      <ng-template #elseBlock>
-        <div class="col-md-12 d-none d-md-block offer-center">
-          {{offerList.offerValidity | date}}
-          <button type="button" class="btn btn-secondary" (click)="notLogin()" >Add To CarryBag</button>
-          <button type="button" class="btn btn-secondary" (click)="notLogin()" >Add to Wishlist</button>
-        </div>
-      </ng-template>
-    </div>
+  <!-- This will route to Offers and Feedbacks -->
+  <div class="row my-5">
+    <ul class="container nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item col-6">
+        <a class="nav-link active text-pride" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Offers</a>
+      </li>
+      <li class="nav-item col-6">
+        <a class="nav-link text-pride" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" (click)="getFeedback()">Feedback</a>
+      </li>
+    </ul>
   </div>
-</div>
-</div>
 
-    <!-- <div class="container mb-1">
-      <div class="row offer border show-offer-border">
-        <div class="col-md-3 col-sm-4 col-6 offer-image bg-white">
-            <div class="card display-offer-image bg-white border-0">
-              <img class="card-img" src="../../assets/tab.jpg" alt="Card image">
+  <!--   This card shows the Offer by Vendor -->
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active mb-5" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div *ngIf="offersList.length">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4 card-group mb-3 text-dark" *ngFor=" let result of offersList | paginate:{itemsPerPage : 6, currentPage : p}">
+              {{productPrice(result.originalPrice,result.discount)}}
+              <div class="card card-w text-dark m-5" [routerLink]="['/', 'product',result.userId,result.offerId]">
+                <div class="card-img-overlay">
+                  <span class="badge badge-pill badge-info card-discount p-3">{{result.discount}}% OFF</span>
+                  <div class="btn-group" *ngIf="user; else elseBlock">
+                    <button class="btn btn-dark ml-2 mr-2 badge-info" type="button" (click)="addToCarrybag(result)"><i class="fa fa-cart-plus" aria-hidden="true"></i></button>
+                    <button class="btn btn-dark badge-info" type="button" (click)="addToWishlist(result)"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+                  </div>
+                  <ng-template #elseBlock>
+                    <div class="btn-group btn-group-justified">
+                      <button class="btn btn-dark ml-2 mr-2 badge-info" type="button" (click)="notLogin()"><i class="fa fa-cart-plus" aria-hidden="true"></i></button>
+                      <button class="btn btn-dark badge-info" type="button" (click)="notLogin()"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+                    </div>
+                  </ng-template>
+                </div>
+                <img class="card-img card-w" src="../../../../assets/card.jpeg" alt="Card image">
+                <div class="card-body card-data">
+                  <div class="row">
+                      <div class="col-8">
+                        <span class="card-heading">{{result.offerTitle}}</span>
+                      </div>
+                      <div class="col-4">
+                        <span class="fa fa-star mx-2"></span>{{result.offerRating}}
+                      </div>
+                      <div class="col-12">
+                        <span class="card-price">₹<del>{{result.originalPrice}}</del></span>
+                        <span class="card-discounted-price">{{priceAfterDiscount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
-        <div class="col-md-5 col-sm-4 col-6 d-none d-sm-block offer-center">
-          <b>{{offerList.offerTitle}}</b>
-          <p>{{offerList.offerDescription}}</p>
-        </div>
-        <div class="col-md-5 col-sm-4 mt-4 pl-2 col-6 d-block d-sm-none" style="margin-top: 25px; margin-bottom: 0px;">
-          <b>{{offerList.offerTitle}}</b>
-          <br/>
-          <div class="offer-deleted-price-small">MRP:<del>₹{{offerList.originalPrice}}</del></div>
-          ₹{{priceAfterDiscount}}
-          <div class="offer-discount-small d-block d-sm-none border border-danger rounded px-2">
-            {{offerList.discount}}% OFF
           </div>
         </div>
-        <div class="col-md-2 col-sm-4 d-none d-sm-block offer-center">
-          <dl>
-            <dd class="offer-discount-large">{{offerList.discount}}% off</dd>
-            <dd><div class="text-before-del-large">MRP:</div><del>₹{{offerList.originalPrice}}</del>  ₹{{priceAfterDiscount}}</dd>
-            <dd></dd>
-          </dl>
-        </div>
-        <div *ngIf="user; else elseBlock">
-          <div class="col-md-2 d-none d-md-block offer-center">
-          {{offerList.offerValidity | date}}
-                <button type="button" class="btn btn-secondary" (click)="addToCarrybag(offerList)" >Add To CarryBag</button>
-                <button type="button" class="btn btn-secondary" (click)="subscribe()" >Subscribe</button>
-          </div>
-       </div>
-        <ng-template #elseBlock>
-          <div class="col-md-2 d-none d-md-block offer-center">
-          {{offerList.offerValidity | date}}
-              <button type="button" class="btn btn-secondary" (click)="notLogin()" >Add To CarryBag</button>
-              <button type="button" class="btn btn-secondary" (click)="notLogin()" >Subscribe</button>
-        </div>
-        </ng-template>
       </div>
-    </div> -->
-  </div>
+    </div>
+
+    <!--     This card shows feedbacks given to vendor -->
+    <div class="tab-pane fade mb-5" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 card-group mb-3" *ngFor=" let result of feedbacks | paginate:{itemsPerPage : 6, currentPage : p}">
+            {{productPrice(result.originalPrice,result.discount)}}
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-3">
+                    <img class="card-img feedback-img" src="../../../../assets/card.jpeg" alt="Card image">
+                  </div>
+                  <div class="col-3">
+                    <span class="card-heading">{{result.offerTitle}}</span>
+                  </div>
+                  <div class="col-4">
+                    <span class="card-heading">{{result.feedback}}</span>
+                  </div>
+                  <div class="col-2">
+                    <span class="card-heading"><span class="fa fa-star mx-2"></span>{{result.rating}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <pagination-controls class="ml-5 text-center" (pageChange)="p=$event"></pagination-controls>
+    </div>
+</div>

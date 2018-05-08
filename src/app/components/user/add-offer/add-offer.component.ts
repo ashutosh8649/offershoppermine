@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { AddOfferService } from '../../../services/add-offer.service';
 import { FormsModule} from '@angular/forms';
 import { AuthorizationService } from '../../../services/authorization.service';
+import { MessageService } from '../../../services/message.service';
 
 @Component({
 	selector: 'app-add-offer',
 	templateUrl: './add-offer.component.html',
 	styleUrls: ['./add-offer.component.css'],
-	providers:[ AddOfferService,AuthorizationService ]
+	providers:[ AddOfferService, AuthorizationService, MessageService ]
 })
 
 export class AddOfferComponent implements OnInit {
 	offerId:String ;
 	userId: String ;
 	dateOfAnnouncement:any;
-	offerCategories:String;
+	offerCategories:String="Select Category";
 	offerValidity:any;
 	discount:any;
 	keywords:String;
@@ -35,28 +36,31 @@ export class AddOfferComponent implements OnInit {
 
 	obj={};
 	toRedis={};
+	toSoundex={};
 	User:any={};
 
 	date = new Date();
 
 	constructor(private addOfferService: AddOfferService,
-		private authorizationService: AuthorizationService) { }
+		private authorizationService: AuthorizationService,
+		private messageService: MessageService,
+		private _vcr: ViewContainerRef
+		) { }
 
 	ngOnInit()
 	{
 		this.getUserId();
-
 	}
 
 
 	getUserId() {
 		this.authorizationService.getUserId().subscribe((res) =>{
-		  this.userInfo = res.text().split(',');
-		  this.userId = this.userInfo[2];
-		  this.getOffers(this.userId);
+			this.userInfo = res.text().split(',');
+			this.userId = this.userInfo[2];
+			this.getOffers(this.userId);
 		}, (error) =>{
 		})
-	  }
+	}
 
 	public offers=[];
 
@@ -70,12 +74,16 @@ export class AddOfferComponent implements OnInit {
 	})
 	}
 
-	deleteOffer(offerId){
-		this.addOfferService.deleteOffer(offerId).subscribe((res) =>{
-			this.getOffers(this.userId);
-		}, (error) =>{
-			alert(error + "deleting restaurant does not works");
-		})
+	deleteOffer(offerId) {
+		this.messageService.deleteConfirmation(()=>
+			this.addOfferService.deleteOffer(offerId).subscribe((res) =>{
+				this.messageService.showSuccessToast(this._vcr,"Deleted");
+				this.getOffers(this.userId);
+			}, (error) =>{
+				alert(error + "deleting restaurant does not works");
+			})
+			);
+		
 	}
 
 	reset(){
@@ -135,9 +143,11 @@ export class AddOfferComponent implements OnInit {
 
 	}
 
-	getOffer(){
+	getOffer() {
 		this.addOfferService.getShopAddress(this.userId).subscribe((res) =>{
 			this.shopAddress=res.shopAddress;
+			debugger
+			alert(this.shopAddress);
 			this.addOffer();
 		}, (error) =>{
 			console.log(error);
@@ -146,15 +156,50 @@ export class AddOfferComponent implements OnInit {
 	}
 
 	addOffer(){
-		let time = "T"+this.date.getHours()+":"+this.date.getMinutes()+":"+this.date.getSeconds()+"Z";
-		time = this.offerValidity+time;
-		console.log("dateOfAnnouncement: "+this.offers[0].dateOfAnnouncement);
-		console.log("Expected format: 2018-04-24T04:34:31.660Z");
+		this.date = new Date();
+		let minutes = "";
+		let hours = "";
+		let seconds = "";
+		let day = "";
+		let month = "";
+		let year = "";
+
+		if(this.date.getMinutes() < 10){
+			minutes = "0"+this.date.getMinutes().toString();
+		} else{
+			minutes = this.date.getMinutes().toString();
+		}
+		if(this.date.getHours() < 10){
+			hours = "0"+this.date.getHours().toString();
+		} else{
+			hours = this.date.getHours().toString();
+		}
+		if(this.date.getSeconds() < 10){
+			seconds = "0"+this.date.getSeconds().toString();
+		} else{
+			seconds = this.date.getSeconds().toString();
+		}
+
+		if(this.date.getDate() < 10) {
+			day = "0"+this.date.getDate().toString();
+		} else {
+			day = this.date.getDate().toString();
+		}
+		if(this.date.getMonth() < 10) {
+			month = "0"+this.date.getMonth().toString();
+		} else {
+			month = this.date.getMonth().toString();
+		}
+		year = this.date.getFullYear().toString();
+
+		let time = "T"+hours+":"+minutes+":"+seconds;
+		let datetime = year+"-"+month+"-"+day+time;
+		
 		this.obj={
 			"userId"  :this.userId,
 			"offerTitle" :this.offerTitle,
-			"offerValidity" :time,
-			"dateOfAnnouncement" :this.offers[0].dateOfAnnouncement+"0Z",
+			"offerValidity" :this.offerValidity+time,
+			"dateOfAnnouncement" :datetime,
 			"address" :this.shopAddress,
 			"offerDescription" :this.offerDescription,
 			"originalPrice" :this.originalPrice,
@@ -167,54 +212,57 @@ export class AddOfferComponent implements OnInit {
 
 		this.addOfferService.addNewOffer(this.obj).subscribe((res) =>{
 			this.getOffers(this.userId);
+			this.messageService.showSuccessToast(this._vcr,"Offer added");
 		}, (error) =>{
 			console.log("Error:");
 			console.log(error);
 		})
 
 		this.toRedis={
-				 "keywords":this.keywords 
-				}
-			 this.addOfferService.addToRedis(this.toRedis).subscribe((res) =>{ }, (error) =>{
-			  })
-
-	}
-
-couponValidate()
-{
-
-	this.addOfferService.couponValidateService(this.coupon,this.userId).subscribe((res) =>{
-
-		let couponData = res;
-
-		if(couponData==null) {
-			alert("wrong coupon entered");
+			"keywords":this.keywords
 		}
-		else {
-			let obj = {
-				"couponId" : couponData.couponId,
-				"userId" : couponData.userId,
-				"offerId" : couponData.offerId,
-				"vendorId" : couponData.vendorId,
-				"rating" : couponData.rating,
-				"vendorValidationFlag" : true
-			}
-			this.addOfferService.changeFlag(obj).subscribe((res) =>{
-				alert("coupon verified");
+		this.addOfferService.addToRedis(this.toRedis).subscribe((res) =>{ }, (error) =>{
+		})
 
-
-
-
+		this.toSoundex={
+			"offerTitle" : this.offerTitle,
+			"offerCategories" : this.offerCategories,
+			"keywords" : this.keywords
+		}
+				
+			this.addOfferService.addToSoundex(this.toSoundex).subscribe((res) =>{
 			}, (error) =>{
-
+				alert("not added to soundex");
 			})
-		}
 
 	}
-	, (error) =>{console.log("error");
-})
-}
 
+	couponValidate()
+	{
 
+		this.addOfferService.couponValidateService(this.coupon,this.userId).subscribe((res) =>{
 
+			let couponData = res;
+
+			if(couponData==null) {
+				alert("wrong coupon entered");
+			}
+			else {
+				let obj = {
+					"couponId" : couponData.couponId,
+					"userId" : couponData.userId,
+					"offerId" : couponData.offerId,
+					"vendorId" : couponData.vendorId,
+					"rating" : couponData.rating,
+					"vendorValidationFlag" : true
+				}
+				this.addOfferService.changeFlag(obj).subscribe((res) =>{
+					this.messageService.showSuccessToast(this._vcr,"coupon verified");
+				}, (error) =>{
+				})
+			}
+		}
+		, (error) =>{console.log("error");
+	})
+	}
 }

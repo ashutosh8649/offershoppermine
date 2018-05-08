@@ -7,5 +7,6 @@ export class AddOfferConfig {
 	public static couponFlagChangedUrl="http://10.151.61.152:8765/api/feedback-database-service/os/addfeedback/comment";
 	public static updateOffersInCarryBag="http://10.151.61.152:8765/api/carry-bag-database-service/bag/update";
 	public static getVendorDetailURL="http://10.151.61.152:8765/api/uservendor-activity-service/userdata/";
-	public static addToRedisURL="http://10.151.61.152:8765/api/search-service/load-data/";
+	public static addToRedisURL="http://10.151.61.152:8765/api/search-service/load-data";
+	public static addToSoundexURL="http://10.151.61.152:8765/api/search-service/add-code";
 }

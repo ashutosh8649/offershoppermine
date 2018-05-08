@@ -14,7 +14,7 @@
   <!-- Navbar -->
   <nav class="navbar mt-0 navbar-expand-lg navbar-dark bg-white">
     <!-- Logo -->
-    <a [routerLink]="['/homepage']"><span class="logo justify-self-left">Offer<font class="dot">.</font>Shopper</span></a>
+    <a [routerLink]="['/homepage',userLocation]"><span class="logo justify-self-left">Offer<font class="dot">.</font>Shopper</span></a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -24,33 +24,21 @@
       <div class="collapse navbar-collapse justify-content-center " id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-0 mb-0 mt-2 mt-lg-0 justify-self-center">
           <li class="nav-item nav-text ml-3">
-            <a class="nav-link text-dark active" *ngIf="url=='/homepage'" routerLink="/homepage">
-              Home
-              <span class="sr-only">(current)</span>
-            </a>
-            <a class="nav-link text-dark" *ngIf="url!='/homepage'" routerLink="/homepage">
-              Home
+            <a class="nav-link text-dark" [ngClass]="{active:url=='homepage'}" [routerLink]="['homepage',userLocation]">
+              {{ 'HEADER.NAVBAR.HOME' | translate }}
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item nav-text">
-            <a class="nav-link active" *ngIf="url=='/search'" routerLink="/search">
+            <a class="nav-link" [ngClass]="{active:url=='search'}" routerLink="/search">
               <font class="text-pride">
-                Shop
-              </font>
-            </a>
-            <a class="nav-link" *ngIf="url!='/search'" routerLink="/search">
-              <font class="text-pride">
-                Shop
+              {{ 'HEADER.NAVBAR.SHOP' | translate }}
               </font>
             </a>
           </li>
           <li class="nav-item nav-text">
-            <a class="nav-link text-dark active" *ngIf="url=='/help/FAQs'" routerLink="/help/FAQs">
-                FAQ
-            </a>
-            <a class="nav-link text-dark" *ngIf="url!='/help/FAQs'" routerLink="/help/FAQs">
-                FAQ
+            <a class="nav-link text-dark" [ngClass]="{active:url=='help'}" routerLink="/help/FAQs">
+              {{ 'HEADER.NAVBAR.FAQ' | translate }}
             </a>
           </li>
         </ul>
@@ -58,7 +46,7 @@
       <div class="large mt-2">
         <ul class="profile mb-0">
           <div *ngIf="login">
-            <li class="pt-2">
+            <li class="pt-2 loggedIn-name">
               <a (click)="loadUserprofile()"><span class="pr-3">{{user}}</span><i class="far fa-user"></i></a>
             </li>
           </div>
@@ -72,8 +60,8 @@
               <i class="fas fa-shopping-cart"></i>
             </a>
             <div *ngIf="login" class="dropdown-menu m-0 p-0 justify-content-left" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" [routerLink]="['/user', 'wishlist']">Wishlist</a>
-              <a class="dropdown-item" [routerLink]="['/user', 'carrybag']">Carrybag</a>
+              <a class="dropdown-item" [routerLink]="['/user', 'wishlist']">{{ 'HEADER.NAVBAR.WISHLIST' | translate }}</a>
+              <a class="dropdown-item" [routerLink]="['/user', 'carrybag']">{{ 'HEADER.NAVBAR.CARRYBAG' | translate }}</a>
             </div>
           </li>
           <li *ngIf="login" class="nav-item dropdown ml-3">
@@ -81,13 +69,13 @@
               <i class="fas fa-shopping-cart"></i>
             </a>
             <div class="dropdown-menu m-0 p-0 justify-content-left" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" [routerLink]="['/user', 'wishlist']">Wishlist</a>
-              <a class="dropdown-item" [routerLink]="['/user', 'carrybag']">Carrybag</a>
+              <a class="dropdown-item" [routerLink]="['/user', 'wishlist']">{{ 'HEADER.NAVBAR.WISHLIST' | translate }}</a>
+              <a class="dropdown-item" [routerLink]="['/user', 'carrybag']">{{ 'HEADER.NAVBAR.CARRYBAG' | translate }}</a>
             </div>
           </li>
           <div *ngIf="login">
             <li class="nav-text">
-              <a class="text-dark font-weight-bold logout" (click)="logout()" routerLink="/homepage">Logout</a>
+              <a class="text-dark font-weight-bold logout" (click)="logout()" [routerLink]="['/homepage',userLocation]">{{ 'HEADER.NAVBAR.LOGOUT' | translate }}</a>
             </li>
           </div>
         </ul>

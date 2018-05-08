@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
     /*let id = this.route.snapshot.params['id'];
     this.userList=id;*/
     this.route.paramMap.subscribe(params => {
-      this.userList = params.get('param');
+      this.userList = params.get('id');
       this.isLogin();
     });
   }
@@ -47,5 +47,12 @@ export class UserComponent implements OnInit {
       console.log(res.text());
     }, (error) =>{
     })
+  }
+
+  changeSidebarVender(event) {
+    if(event) {
+      this.getUserId();
+      this.router.navigate(['/user/add-offer']); 
+    }
   }
 }

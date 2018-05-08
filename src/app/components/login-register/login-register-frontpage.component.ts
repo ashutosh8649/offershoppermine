@@ -1,4 +1,4 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,Inject,ViewContainerRef } from '@angular/core';
 import {FormGroup, FormControl, Validators,FormBuilder} from '@angular/forms';
 import {Router} from '@angular/router';
 import {loginDetails} from './loginDetails';
@@ -6,12 +6,13 @@ import {registerDetails} from './registerDetails';
 import {LoginService} from '../../services/login.service';
 import {RegisterService} from '../../services/register.service';
 import {vendorDetails} from './vendorDetails';
+import { MessageService } from './../../services/message.service';
 
 @Component({
   selector: 'app-login-register-frontpage',
   templateUrl: './login-register-frontpage.component.html',
   styleUrls: ['./login-register-frontpage.component.css'],
-  providers:[ RegisterService ]
+  providers:[ RegisterService,MessageService,LoginService ]
 })
 export class LoginRegisterFrontpageComponent implements OnInit {
 
@@ -31,12 +32,15 @@ export class LoginRegisterFrontpageComponent implements OnInit {
   tempPassword:String;
   isAlredyExist:boolean=false;
   status: boolean = false;
+  private userLocation: string = "Delhi";
 
   constructor(
     @Inject(FormBuilder)  fb: FormBuilder,
     private loginService:LoginService,
     private registerService:RegisterService,
-    private router:Router
+    private router:Router,
+    private messageService:MessageService,
+    private _vcr:ViewContainerRef
     ) {
     this.fb=fb;
     this.registerForm=this.fb.group({
@@ -52,25 +56,7 @@ export class LoginRegisterFrontpageComponent implements OnInit {
       username : new FormControl('', [Validators.required, Validators.email]),
       password : new FormControl('', [Validators.required]),
     });
-    this.form=new FormGroup({
-      firstName : new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z]+')]),
-      lastName : new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z]+')]),
-      email : new FormControl('', [Validators.required, Validators.email]),
-      password : new FormControl('',Validators.required),
-      contact : new FormControl('', [Validators.pattern('[0-9]*'),Validators.minLength(10),Validators.maxLength(11)]),
-      DOB : new FormControl(''),
-      gender : new FormControl(''),
-      address : new FormControl(''),
-      city : new FormControl('',Validators.pattern('[a-zA-Z][a-zA-Z]+')),
-      state : new FormControl('',Validators.pattern('[a-zA-Z][a-zA-Z]+')),
-      zip : new FormControl('', [Validators.pattern('[0-9]*')]),
-      vendorAddress : new FormControl('', [Validators.required]),
-      vendorCity : new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z]+')]),
-      vendorState : new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z][a-zA-Z]+')]),
-      vendorZip : new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
-      vendorContact : new FormControl('', [Validators.required, Validators.pattern('[0-9]*'),Validators.minLength(10),Validators.maxLength(11)])
-    });
-
+    this.userLocation = localStorage.getItem("loc");
   }
 
   onChanges(): void {
@@ -78,20 +64,6 @@ export class LoginRegisterFrontpageComponent implements OnInit {
       this.isAlredyExist=false;
     });
   }
-
-  validateUsername(){
-    let body= {
-      "email": this.registerForm.get('username').value
-    };
-    this.registerService.register(body).subscribe((res) => {
-    },
-    (res:Response) => {
-      if(res.status==409) {
-        this.isAlredyExist=true;
-      }
-    });
-  }
-
 
   login(){
     let username=this.loginForm.get('username').value;
@@ -104,8 +76,10 @@ export class LoginRegisterFrontpageComponent implements OnInit {
     }
 
     this.loginService.loginWithEmailId(username,result).subscribe((res) =>{
-      console.log("Login component success");
+
       this.router.navigate(['/homepage']);
+      this.router.navigate(['/homepage',this.userLocation]);
+
     }, (res:Response) =>{
       if(res.status==401){
         alert("Unauthorized User");
@@ -139,69 +113,6 @@ checkIfMatchingPasswords(group: FormGroup) {
   }
 }
 
-registerVendor(){
-  let tempPassword="";
-
-  tempPassword=this.form.get('password').value;
-  var xorKey = 129;
-  var resultPassword = "";
-
-  for (let i = 0; i < tempPassword.length; i++) {
-    resultPassword += String.fromCharCode(xorKey ^ tempPassword.charCodeAt(i));
-  }
-
-  let body={
-    "address": {
-      "city": this.form.get('city').value,
-      "state": this.form.get('state').value,
-      "street": this.form.get('address').value,
-      "zipCode": this.form.get('zip').value
-    },
-    "dob": this.form.get('DOB').value,
-    "email": this.form.get('email').value,
-    "firstName": this.form.get('firstName').value,
-    "gender":    this.form.get('gender').value,
-    "lastName":  this.form.get('lastName').value,
-    "mobileNo":  this.form.get('contact').value,
-    "password":  resultPassword,
-    "role":      "vendor",
-    "shopAddress": {
-      "city": this.form.get('vendorCity').value,
-      "state": this.form.get('vendorState').value,
-      "street": this.form.get('vendorAddress').value,
-      "zipCode": this.form.get('vendorZip').value
-    },
-    "vendorMobileNo": this.form.get('vendorContact').value
-  };
-  console.log(this.form.value);
-
-  this.registerService.register(body).subscribe((res) =>{
-    alert("Link sent to your account for verification");
-  }, (res:Response) =>{
-    console.log(res);
-    if(res.status==401 || res.status==409){
-      alert("Username already exists");
-    }
-    else if(res.status==500){
-      alert("Internal server error");
-    }
-    else if(res.status==201){
-      alert("Successfully registered");
-    }
-    else if(res.status==404){
-      alert("Service Not Found");
-    }
-    else if(res.status==403){
-      alert("403 Forbidden");
-    }
-    else{
-      alert("Connection error");
-
-    }
-  });
-
-}
-
 registerUser(){
   let tempPassword="";
 
@@ -216,23 +127,21 @@ registerUser(){
   let body={
     "email": this.registerForm.get('username').value,
     "password":  resultPassword,
-    "role":      "customer"
+    "role":      "Customer"
   };
 
   this.registerService.register(body).subscribe((res) =>{
-      alert("Link sent to your account for verification");
-      console.log(res);
+    this.messageService.showSuccessToast(this._vcr,"Verfification link sent your Email Id");
+    this.registerForm.reset();
   }, (res:Response) =>{
-    console.log("In Error");
-    console.log(res);
     if(res.status==401 || res.status==409){
-      alert("Username already exists");
+      this.messageService.showErrorToast(this._vcr,"Username already exists");
     }
     else if(res.status==500){
       alert("Internal server error");
     }
     else if(res.status==201){
-      alert("Successfully registered");
+      this.messageService.showSuccessToast(this._vcr,"Successfully Registered");
     }
     else if(res.status==404){
       alert("Service Not Found");
@@ -247,40 +156,6 @@ registerUser(){
   });
 
 }
-
-// onKeydown(event) {
-//    this.validateUsername();
-// }
-
-IsHidden= true;
-IsNotHidden=false;
-onSelect(){
-  this.registerUsername = this.registerForm.get('username').value;
-  this.registerPassword = this.registerForm.get('password').value;
-
-
-  this.form.patchValue({
-    email:  this.registerUsername,
-    password: this.registerPassword
-  });
-
-  this.IsHidden= !this.IsHidden;
-  this.IsNotHidden= !this.IsNotHidden;
-}
-
-setAddress(){
-  this.registerAddress=this.form.get('address').value;
-  this.registerCity=this.form.get('city').value;
-  this.registerState=this.form.get('state').value;
-  this.registerZip=this.form.get('zip').value;
-
-  this.form.patchValue({
-    vendorAddress:  this.registerAddress,
-    vendorCity: this.registerCity,
-    vendorState:  this.registerState,
-    vendorZip: this.registerZip
-  });
-};
 
 }
 

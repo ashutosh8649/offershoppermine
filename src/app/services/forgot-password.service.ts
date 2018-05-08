@@ -11,19 +11,11 @@ export class ForgotPasswordService {
 
   constructor(private http: Http) { }
 
-   forgotPasswordWithEmail(username){
+  forgotPasswordWithEmail(username){
     return this.http.get(ForgotPassword.passEmailId+username)
-     .map((res:Response) => {
-
-  		 if(res.status==204){
-          alert("Unauthorized User");
-        }
-        else if(res.status==202){
-  		alert("Link sent to mail");	 
-
-     }
- },
-	(error: any)=>console.log("error in calling register service"));
-}
+    .map((res:Response) => { 
+    },
+    (error: any)=>console.log("error in calling register service"));
+  }
 
 }

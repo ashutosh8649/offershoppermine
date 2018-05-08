@@ -16,13 +16,13 @@ a {
 .text-heading {
     text-decoration: bold;
     text-transform: capitalize;
-    font-family: 'Holtwood One SC', serif;
+    font-family: 'Holtwood One SC', serif,'Sree Krushnadevaraya','Suranna','Ramaraja',"Mukta Malar";
     color: white;
     font-size: 18px;
 }
 
 .text-lead {
-    font-family: 'Julius Sans One', sans-serif;
+    font-family: 'Julius Sans One', sans-serif,'Sree Krushnadevaraya','Suranna','Ramaraja',"Mukta Malar";
     color: lavender;
     font-size: 13px;
 }
@@ -45,9 +45,7 @@ a {
 .nm-t{
     margin-top: -35px;
 }
-.footer-terms {
+
+li {
     cursor: pointer;
-}
-.footer-FAQ {
-    cursor: pointer;   
 }

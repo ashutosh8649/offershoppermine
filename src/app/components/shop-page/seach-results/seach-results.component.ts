@@ -13,8 +13,8 @@ export class SeachResultsComponent implements OnInit {
 	public userInfo : any;
 	public user : any;
 	private priceAfterDiscount;
-	
-	@Input() results;
+
+	@Input() results = [];
 
 	constructor(private wishlistService:WishlistService,
 		private authorizationService: AuthorizationService,
@@ -37,7 +37,7 @@ export class SeachResultsComponent implements OnInit {
 	}
 
 	productPrice(offerOriginalPrice,offerDiscount){
-		this.priceAfterDiscount = (offerOriginalPrice)*(1-(offerDiscount)/100);
+		this.priceAfterDiscount = Number((offerOriginalPrice)*(1-(offerDiscount)/100)).toFixed(2);
 	}
 
 	addToWishlist(offer1) {
@@ -53,8 +53,14 @@ export class SeachResultsComponent implements OnInit {
 			"offerValidity":offer1.offerValidity
 		}
 		this.wishlistService.addToWishlist(wishlistBean).subscribe((res) =>{
-			this.messageService.showSuccessToast(this._vcr,"Added");
-		},(error) =>{
+			this.messageService.showSuccessToast(this._vcr,"Added in Wishlist");
+		},(res:Response) =>{
+			if(res.status==409){
+				this.messageService.showErrorToast(this._vcr,"Already in Wishlist");
+			}
+			else if(res.status==400){
+				this.messageService.showErrorToast(this._vcr,"Service Not Found");
+			}
 		})
 	}
 
@@ -69,10 +75,17 @@ export class SeachResultsComponent implements OnInit {
 			"offerValidity":offer.offerValidity,
 			"vendorId":offer.userId
 		}
+		console.log(offer.offerId);
+		console.log(carrybagBean);
 		this.offersService.addToCarrybag(carrybagBean).subscribe((res) =>{
 			this.messageService.showSuccessToast(this._vcr,"Added to CarryBag");
-		},(error) =>{
-			this.messageService.showSuccessToast(this._vcr,"Already Added");
+		},(res:Response) =>{
+			if(res.status==409){
+				this.messageService.showErrorToast(this._vcr,"Already in CarryBag");
+			}
+			else if(res.status==400){
+				this.messageService.showErrorToast(this._vcr,"Service Not Found");
+			}
 		})
 	}
 

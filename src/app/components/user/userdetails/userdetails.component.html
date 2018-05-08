@@ -1,5 +1,3 @@
-
-
 <div class="py-5 px-2 xyz">
   <div class="container abc d-flex align-items-center justify-content-center">
     <div class="row border rounded p-2">
@@ -30,75 +28,62 @@
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label for="inputCity">City</label>
-            <!-- <input type="text" class="form-control" id="inputCity" placeholder="{{city}}" disabled [(ngModel)]="city" [ngModelOptions]="{standalone: true}"> -->
-            
+            <label for="inputCity">City</label>            
             <select name=slist class="form-control" id="inputCity" disabled [(ngModel)]="city" [ngModelOptions]="{standalone: true}">
-              <option value="">{{city}}</option>
-              <option *ngFor="let city of cities" value={{city}}>{{city}}</option>
+              <option value="{{city}}">{{city}}</option>
+              <option *ngFor="let city of homeCities" value={{city}}>{{city}}</option>
             </select>
-
           </div>
           <div class="form-group col-md-4">
             <label for="inputState">State</label>
-            <!-- <input type="text" class="form-control" id="inputState" placeholder="{{state}}" disabled [(ngModel)]="state" [ngModelOptions]="{standalone: true}"> -->
-            <select name=slist class="form-control" id="inputState" disabled [(ngModel)]="state" [ngModelOptions]="{standalone: true}">
-             <option value="">{{state}}</option>
-             <option *ngFor="let state of states" value={{state}}>{{state}}</option>
-           </select>
-         </div>
-         <div class="form-group col-md-2">
-          <label for="inputZip">Zip</label>
-          <input type="text" class="form-control" id="inputZip" placeholder="{{zip}}" disabled [(ngModel)]="zip" [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-      <!-- If user has fill all the above form then the below form will be enabled-->
-      <div *ngIf="firstName && lastName && phone && emailId && street && city && state && zip">
-        <hr/>
-        <div class="form-group">
-          <label for="inputShopName">Shop Name</label>
-          <input type="text" class="form-control" id="inputShopName" placeholder="{{shopName}}" disabled [(ngModel)]="shopName" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="checkbox pb-2">
-          <input type="checkbox" (click)="setCheckboxAddress()" id="SameCheckbox" value="SameAsAbove"> Same as above
-        </div>
-        <div class="form-group">
-          <label for="inputShopAddress">Shop's Address</label>
-          <input type="text" class="form-control" id="inputShopAddress" placeholder="{{shopStreet}}" disabled [(ngModel)]="shopStreet" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputShopCity">Shop's City</label>
-            <!-- <input type="text" class="form-control" id="inputShopCity" placeholder="{{shopCity}}" disabled [(ngModel)]="shopCity" [ngModelOptions]="{standalone: true}"> -->
-            <select name=slist class="form-control" id="inputShopCity" disabled [(ngModel)]="shopCity" [ngModelOptions]="{standalone: true}">
-              <option value=""></option>
-              <option *ngFor="let city of cities" value={{city}}>{{city}}</option>
+            <select (change)="showRelevantCitiesHome(state)" name=slist class="form-control" id="inputState" disabled [(ngModel)]="state" [ngModelOptions]="{standalone: true}">
+              <option value="state">{{state}}</option>
+              <option *ngFor="let state of states" value={{state}}>{{state}}</option>
             </select>
           </div>
-          <div class="form-group col-md-4">
-            <div *ngIf="shopCity==city">
-              {{setShopAddress()}}
-              <label for="inputShopState">Shop's State</label>
-              <input type="text" class="form-control" id="inputShopState" placeholder="{{shopState}}" disabled [(ngModel)]="shopState" [ngModelOptions]="{standalone: true}">
-            </div>
-            <div *ngIf="shopCity!=city">
-              <label for="inputShopState">Shop's State</label>
-              <!-- <input type="text" class="form-control" id="inputShopState" placeholder="{{shopState}}" disabled [(ngModel)]="shopState" [ngModelOptions]="{standalone: true}"> -->
-              <select name=slist class="form-control" id="inputShopState" disabled [(ngModel)]="shopState" [ngModelOptions]="{standalone: true}">
-               <option value=""></option>
-               <option *ngFor="let state of states" value={{state}}>{{state}}</option>
-             </select>
-           </div>
-         </div>
-         <div class="form-group col-md-2">
-          <label for="inputShopZip">Shop's Zip</label>
-          <input type="text" class="form-control" id="inputShopZip" placeholder="{{shopZip}}" disabled [(ngModel)]="shopZip" [ngModelOptions]="{standalone: true}">
+          <div class="form-group col-md-2">
+            <label for="inputZip">Zip</label>
+            <input type="text" class="form-control" id="inputZip" placeholder="{{zip}}" disabled [(ngModel)]="zip" [ngModelOptions]="{standalone: true}">
+          </div>          
         </div>
-      </div>
-      <button type="submit" class="btn button justify-content-cente" (click)="submit()">Save</button>
-      <button type="button" class="btn button justify-content-cente" (click)="undisableTxt()">Edit</button>
+        <hr/>
+        <!-- only visible when the logged in person is a seller-->
+        <div *ngIf="role=='Vendor'">
+        <div class="form-group">
+            <label for="inputShopName">Shop Name</label>
+            <input type="text" class="form-control" id="inputShopName" placeholder="{{shopName}}" disabled [(ngModel)]="shopName" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="checkbox pb-2">
+            <input type="checkbox" (click)="setCheckboxAddress()" id="SameCheckbox" value="SameAsAbove"> Same as above
+          </div>
+          <div class="form-group">
+            <label for="inputShopAddress">Shop's Address</label>
+            <input type="text" class="form-control" id="inputShopAddress" placeholder="{{shopStreet}}" disabled [(ngModel)]="shopStreet" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputShopCity">Shop's City</label>
+              <select name=slist class="form-control" id="inputShopCity" disabled [(ngModel)]="shopCity" [ngModelOptions]="{standalone: true}">
+                <option value="{{shopCity}}">{{shopCity}}</option>
+                <option *ngFor="let city of shopCities" value={{city}}>{{city}}</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputShopState">Shop's State</label>
+                <select (change)=showRelevantCitiesShop(shopState) name=slist class="form-control" id="inputShopState" disabled [(ngModel)]="shopState" [ngModelOptions]="{standalone: true}">
+                  <option value="{{shopState}}">{{shopState}}</option>
+                  <option *ngFor="let state of states" value={{state}}>{{state}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="inputShopZip">Shop's Zip</label>
+              <input type="text" class="form-control" id="inputShopZip" placeholder="{{shopZip}}" disabled [(ngModel)]="shopZip" [ngModelOptions]="{standalone: true}">
+            </div>
+          </div>
+        </div>
+        <!-- If user has fill all the above form then the below form will be enabled-->        
+        <button type="submit" class="btn button justify-content-cente" (click)="submit()">Save</button>
+        <button type="button" class="btn button justify-content-cente" (click)="undisableTxt()">Edit</button>    
+      </form>
     </div>
-  </form>
-</div>
-</div>
-</div>
+  </div>

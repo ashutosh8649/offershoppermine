@@ -4,6 +4,10 @@
     font-size:45px;
 }
 
+.loggedIn-name {
+  cursor: pointer;
+}
+
 #logo:hover {
     transform: scale(5,5);
 }
@@ -16,7 +20,7 @@
 }
 
 nav a {
-    font-family: 'Julius Sans One', sans-serif;
+    font-family: 'Julius Sans One', sans-serif,'Sree Krushnadevaraya','Suranna','Ramaraja',"Mukta Malar";
     text-decoration: black;
     color: #a49dad;
 }
@@ -45,7 +49,7 @@ div a:hover {
 }
 
 .logo {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Black Han Sans', sans-serif,'Sree Krushnadevaraya','Suranna','Ramaraja',"Mukta Malar";
     font-size: 2rem;
     color: black;
     padding-left:50px;
@@ -59,7 +63,7 @@ div a:hover {
 
 .header-shadow {
   margin-left: -5px;
-  box-shadow: 10px 1px 3px black;
+  box-shadow: 10px 0px 3px black;
 }
 
 .text-pride {
@@ -75,7 +79,6 @@ div a:hover {
      border: 1px solid #018b8b;
      cursor: pointer;
 }
-
 
  .alert-styling{
    max-width: 30rem;
@@ -94,3 +97,9 @@ div a:hover {
   font-size: 1rem;
   color: white;
 }
+
+@media (max-width: 576px) { 
+    .logo {
+        font-size: 1rem;
+    }
+ }

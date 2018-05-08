@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthorizationService } from '../../../../services/authorization.service';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { LoginService } from '../../../../services/login.service';
+import { AuthorizationService } from '../../../../services/authorization.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @Component({
 	selector: 'app-navbar',
@@ -16,9 +17,11 @@ export class NavbarComponent implements OnInit {
 
 	private login:boolean = false;
 	private token:any;
-	private userId: string;
-	private user: string;
+	private userId: string = "";
+	private user: string = "";
 	private url: string;
+
+	@Input() userLocation:string;
 
 	constructor(
 		private router: Router,
@@ -26,7 +29,11 @@ export class NavbarComponent implements OnInit {
 		private location:Location,
 		private loginService: LoginService
 		) {
-		router.events.subscribe((data:any) => { this.url = data.url; });
+		router.events.subscribe((data:any) => { 
+			if(data.url) {
+				this.url = (data.url.split('/'))[1];
+			}
+		});
 	}
 
 
@@ -45,7 +52,7 @@ export class NavbarComponent implements OnInit {
 			this.login = status;
 			this.getUserId();
 		});
-			this.getUserId();
+		this.getUserId();
 	}
 
 	logout(){
@@ -57,8 +64,8 @@ export class NavbarComponent implements OnInit {
 	getUserId() {
 		this.authorizationService.getUserId().subscribe((res:any) =>{
 			this.userId = (res.text().split(','))[2];
-			this.user = (this.userId.split('@'))[0];
-			console.log(this.user);
+			if(this.userId) 
+				this.user = (this.userId.split('@'))[0];			
 		}, (error) =>{
 		})
 	}
@@ -66,5 +73,5 @@ export class NavbarComponent implements OnInit {
 	loadUserprofile(){
 		this.isLogin();
 		this.router.navigate(['/user/userdetails']);
-		}
+	}
 }

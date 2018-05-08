@@ -8,7 +8,7 @@
 
 .offer-center {
 	position: relative;
-	margin-top: 22px; 
+	margin-top: 22px;
 	margin-bottom: 0px;
 }
 
@@ -82,10 +82,61 @@ del {
 	height: 100%;
 }
 
-agm-map {
-  height: 182px;
-}
-
 #subscribe {
 	height: 3rem;
+}
+
+.shop-header {
+	margin-left:5.3rem;
+}
+
+.map {
+	height: 25rem;
+	max-height: 25rem;
+}
+
+.address {
+		font-size: 0.8rem;
+		margin-top: -3rem;
+		margin-left: 0.3rem;
+}
+
+.btn-subs {
+	background-color: #018b8b;
+	color: white;
+}
+
+.text-pride {
+	color: #018b8b;
+}
+
+
+.feedback-img {
+	height: 10rem;
+}
+
+.card-w{
+	cursor: pointer;
+	max-width: 18rem;
+	max-height: 22rem;
+	border: 0px;
+}
+
+.card-data {
+	margin-left: -1.1rem;
+	font-family: 'Julius Sans One', sans-serif;
+	margin-top: -0.5rem;
+}
+
+.card-discount {
+	font-family: 'Poiret One', cursive;
+}
+
+.card-heading {
+	color:black;
+	font-size: 0.9rem;
+}
+
+.card-discounted-price {
+	color:red;
 }

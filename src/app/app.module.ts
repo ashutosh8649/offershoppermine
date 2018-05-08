@@ -1,5 +1,10 @@
+/* for translation*/
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA }      from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -48,13 +53,16 @@ import { SearchBarComponent } from './components/shop-page/search-bar/search-bar
 import { HelpComponent } from './components/help/help.component';
 import { LocationService } from './services/location.service';
 import { LoginService } from './services/login.service';
+import { BeASellerComponent } from './components/user/be-a-seller/be-a-seller.component';
+import { WheelComponent } from './components/wheel/wheel.component';
 
 const appRoutes:Routes=[
 
-  { path: '', redirectTo: '/homepage', pathMatch: 'full' },
-  { path: 'homepage', component: HomePageComponent },
-  { path:'user/:param',component:UserComponent },
+  { path: '', redirectTo: '/homepage/Delhi', pathMatch: 'full' },
+  { path: 'homepage/:id', component: HomePageComponent },
+  { path:'user/:id',component:UserComponent },
   { path:'login',component:LoginRegisterFrontpageComponent },
+  { path:'contact',component:ContactUsComponent },
   { path:'vendor-register',component:VendorRegisterComponent },
   { path:'product/:id',component: ProductPageComponent},
   { path:'forgot-password',component: ForgotPasswordComponent},
@@ -98,12 +106,23 @@ const appRoutes:Routes=[
     ShopPageComponent,
     SeachResultsComponent,
     SearchBarComponent,
-    HelpComponent
+    HelpComponent,
+    BeASellerComponent,
+    WheelComponent
   ],
   imports: [
     IonRangeSliderModule,
     NgxPaginationModule,
     BrowserModule,
+    
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  }),
+  HttpClientModule,
     HttpModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -115,6 +134,13 @@ const appRoutes:Routes=[
    })
   ],
   providers: [UserService, WishlistService, CarrybagService, SearchService, OffersService, AuthorizationService, VerifyEmailService,UpdatePasswordService, LocationService,  LoginService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class AppModule { }
+export class AppModule { 
+}
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

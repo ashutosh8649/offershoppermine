@@ -39,5 +39,8 @@ export class SearchBarComponent implements OnInit {
     this.category="All";
   }
 
-
+  enterPressed(event) {
+    if(event.keyCode == 13)
+      document.getElementById("searchButton").click();
+  }
 }

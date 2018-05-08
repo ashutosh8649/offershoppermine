@@ -44,7 +44,7 @@ export class AddOfferService {
  }
 
   addNewOffer(obj){
-
+    console.log(obj);
    return this.http.post(AddOfferConfig.addOfferURL,obj, this.options)
     .map(data => data.json(),
   (error: any)=>console.log("error"));
@@ -55,6 +55,12 @@ addToRedis(obj){
      .map(data => data.json(), 
      (error: any)=>console.log("unable to add to redis")); 
     }
+
+addToSoundex(obj)     {
+  return this.http.post(AddOfferConfig.addToSoundexURL,obj, this.options) 
+  .map(data => data.json(), 
+  (error: any)=>console.log("unable to add to soundex")); 
+}
 
 couponValidateService(coupon,vendorId){
   return this.http.get(AddOfferConfig.validateCouponUrl+coupon+"/vendorId/"+vendorId, this.options)

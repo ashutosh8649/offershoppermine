@@ -30,8 +30,7 @@ export class ProductDetailService {
 
    getOfferById(offerId) {
   return this.http.get(Product.getOfferByOfferId+offerId, this.options)
-   .map(data => data.json(),
-     (error: any)=>console.log("error in getting data from database"));
+   .map(data => data.json(),error=>console.log("error in getting data from database"));
  }
 
   searchRelatedProducts(category){

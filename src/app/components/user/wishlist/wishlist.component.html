@@ -1,11 +1,14 @@
-
+<!-- wishlist header -->
 <div class="wishlist-header">
   <img src="../../../../../assets/wishcart_jumbo.png" class="img-fluid">
   <div class="wishlist-header-content d-flex align-items-center justify-content-center">
     WISHLIST
   </div>
 </div>
+<!-- wishlist header ended -->
+<!-- display wishlist offers -->
 <div class="wishlist-offer">
+  <!-- if wishlist have offers then display -->
   <div *ngIf="wishlistOffers.length">
     <div class="container mb-2 description-container">
       <div class="row">
@@ -22,7 +25,9 @@
         </div>
       </div>
     </div>
+    <!-- iterating through wishlistOffers array to print wishlist offers -->
     <div *ngFor=" let offerList of wishlistOffers">
+      <!-- calling function in ts file to calculate offer price after discount -->
       {{productPrice(offerList.offerOriginalPrice,offerList.offerDiscount)}}
       <div class="container mb-1">
         <div class="row offer border show-offer-border">
@@ -53,12 +58,14 @@
           <div class="col-md-2 d-none d-md-block offer-center">
             {{offerList.offerValidity| date}}
           </div>
+          <!-- button to delete wishlist offer -->
           <button class="btn btn-dark my-2 my-sm-0 container-button d-none d-md-block" type="button" (click)="deleteOffer(offerList.offerId,offerList.userId)"><i class="fas fa-trash-alt"></i> Delete</button>
           <button class="btn btn-dark my-2 my-sm-0 container-button-small d-block d-sm-none" type="button" (click)="deleteOffer(offerList.offerId,offerList.userId)"><i class="fas fa-trash-alt"></i></button>
         </div>
       </div>
     </div>
   </div>
+  <!-- if wishlist is empty -->
   <div *ngIf="!wishlistOffers.length" class="d-flex justify-content-center">
     <h1>Wishlist Empty</h1>
   </div>

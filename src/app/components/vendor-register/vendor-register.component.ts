@@ -3,6 +3,7 @@ import {FormGroup, FormControl, Validators,FormBuilder} from '@angular/forms';
 import {RegisterService} from '../../services/register.service';
 import {States} from '../../configs/state.config';
 import {Cities} from '../../configs/cities.config';
+import { StateCityJson } from '../../configs/state-city-json.config';
 
 @Component({
   selector: 'app-vendor-register',
@@ -13,16 +14,19 @@ import {Cities} from '../../configs/cities.config';
 export class VendorRegisterComponent implements OnInit {
   fb: FormBuilder;
   form:FormGroup;
+  statePass:string;
 
   filter = false;
-
+  selectedStateHome : string = "--Select State--";
+  selectedStateShop : string = "--Select State--";
 
   states= States.states;
-cities=Cities.citiesName;
- constructor(
+  citiesHome = [];
+  citiesShop = [];
+  constructor(
     @Inject(FormBuilder)  fb: FormBuilder,
     private registerService:RegisterService,
-  ) {
+    ) {
     this.fb=fb;
   }
 
@@ -46,6 +50,18 @@ cities=Cities.citiesName;
       vendorContact : new FormControl('', [Validators.required, Validators.pattern('[0-9]*'),Validators.minLength(10),Validators.maxLength(11)]),
       sameAddress: new  FormControl('')
     });
+  }
+
+  //getting values of cities according to the home state
+  findRelevantCitiesHome(){
+       this.selectedStateHome= this.form.get('state').value;
+       this.citiesHome = StateCityJson.stateCityJson[this.selectedStateHome];   
+  }
+
+  //getting values of cities according to the shop state
+  findRelevantCitiesShop(){
+    this.selectedStateShop=this.form.get('vendorState').value;
+    this.citiesShop = StateCityJson.stateCityJson[this.selectedStateShop];
   }
 
   registerVendor(){
@@ -112,25 +128,24 @@ cities=Cities.citiesName;
 
 
   setAddress(){
-if( this.form.get('sameAddress').value==false){
-    if(this.form.get('city').value=="" || this.form.get('state').value=="" ||  this.form.get('address').value=="" || this.form.get('zip').value==""){
-    alert("Address not properly entered");
-    }
-    else{
-      let city= this.form.get('city').value;
-       let state= this.form.get('state').value;
+    if( this.form.get('sameAddress').value==false){
+      if(this.form.get('city').value=="" || this.form.get('state').value=="" ||  this.form.get('address').value=="" || this.form.get('zip').value==""){
+        alert("Address not properly entered");
+      }
+      else{
+        let city= this.form.get('city').value;
+        let state= this.form.get('state').value;
         let street= this.form.get('address').value;
         let zipCode=this.form.get('zip').value;
 
-  this.form.patchValue({
-    vendorAddress:  street,
-    vendorCity: city,
-    vendorState:  state,
-    vendorZip: zipCode
-  });
+        this.form.patchValue({
+          vendorAddress:  street,
+          vendorCity: city,
+          vendorState:  state,
+          vendorZip: zipCode
+        });
 
+      }
     }
-}
   }
-
 }

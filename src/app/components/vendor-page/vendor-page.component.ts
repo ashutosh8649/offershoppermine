@@ -5,19 +5,22 @@ import { SubscribeService } from '../../services/subscribe.service';
 import { AuthorizationService } from './../../services/authorization.service';
 import { MessageService } from './../../services/message.service';
 import { WishlistService } from './../../services/wishlist.service';
+import { FeedbackService } from './../../services/feedback.service';
 
 @Component({
   selector: 'app-vendor-page',
   templateUrl: './vendor-page.component.html',
   styleUrls: ['./vendor-page.component.css'],
-  providers:[OffersService,AuthorizationService,MessageService,SubscribeService,WishlistService]
+  providers:[OffersService,AuthorizationService,MessageService,SubscribeService,WishlistService,FeedbackService]
 })
 
 export class VendorPageComponent implements OnInit {
 
+  offersList:Array<{}>=[];
+  offerFeedback:Array<{}>=[];
+  feedbacks:Array<{}>=[];
   lat: number;
   lng: number;
-  offersList:Array<{}>=[];
   priceAfterDiscount: any;
   shopName:string;
   address:any;
@@ -30,10 +33,12 @@ export class VendorPageComponent implements OnInit {
   public userInfo : any;
   public user : any;
 
+
   constructor(
     private offersService: OffersService,
     private subscribeService:SubscribeService,
     private wishlistService:WishlistService,
+    private feedbackService:FeedbackService,
     private route: ActivatedRoute,
     private authorizationService: AuthorizationService,
     private messageService:MessageService,
@@ -43,9 +48,11 @@ export class VendorPageComponent implements OnInit {
   ngOnInit() {
     this.getUserId();
     this.vendorId=this.route.snapshot.params.id;
+    console.log(this.vendorId);
     this.getOfferlist();
   }
 
+  //Function will logged in Email Id 
   getUserId() {
     this.authorizationService.getUserId().subscribe((res) =>{
       this.userInfo = res.text().split(',');
@@ -54,9 +61,12 @@ export class VendorPageComponent implements OnInit {
     })
   }
 
+  //Function will calculate discounted price
   productPrice(offerOriginalPrice,offerDiscount){
     this.priceAfterDiscount = (offerOriginalPrice)*(1-(offerDiscount)/100);
   }
+
+  //Function will retrieve the offers list
   getOfferlist() {
     this.offersService.getOffers(this.vendorId).subscribe((res) =>{
       this.offersList = res;
@@ -71,6 +81,16 @@ export class VendorPageComponent implements OnInit {
     }, (error) =>{
     })
   }
+
+  //This function will give the feedback recieved by the vendor
+  getFeedback() {
+    this.feedbackService.getFeed(this.vendorId).subscribe((res) =>{
+      this.feedbacks=res;
+    }, (error) =>{
+    })
+  }
+
+  //Function will give the longitude and latitude of shop location
   initMap(){
     this.offersService.getAddress(this.street,this.city,this.state,this.zip).subscribe((res) =>{
       this.address = res;
@@ -80,10 +100,10 @@ export class VendorPageComponent implements OnInit {
     })
   }
 
+  //Function will add offer to carrybag
   addToCarrybag(offer) {
     let carrybagBean = {
       "userId":this.user,
-
       "offerId":offer.offerId,
       "offerTitle":offer.offerTitle,
       "offerOriginalPrice":offer.originalPrice,
@@ -94,28 +114,41 @@ export class VendorPageComponent implements OnInit {
     }
     this.offersService.addToCarrybag(carrybagBean).subscribe((res) =>{
       this.messageService.showSuccessToast(this._vcr,"Added to CarryBag");
-    },(error) =>{
+    },(res:Response) =>{
+      if(res.status==409){
+        this.messageService.showErrorToast(this._vcr,"Already in CarryBag");
+      }
+      else if(res.status==400){
+        this.messageService.showErrorToast(this._vcr,"Service Not Found");
+      }
     })
   }
 
+  //Function will give the message about login
   notLogin(){
     this.messageService.showErrorToast(this._vcr,"Please Login");
   }
 
+  //Function will add vendors to subscription list
   subscribe(){
     let subscribeBean={
       "userId":this.user,
       "vendorId":this.vendorId,
       "shopName":this.shopName,
     }
-    console.log(subscribeBean);
     this.subscribeService.addToSubscriptionList(subscribeBean).subscribe((res) =>{
       this.messageService.showSuccessToast(this._vcr,"Added to Subscription List");
-    },(error) =>{
-      this.messageService.showSuccessToast(this._vcr,"Already in Subscription List");
+    },(res:Response) =>{
+      if(res.status==409){
+        this.messageService.showErrorToast(this._vcr,"Already in Subscription List");
+      }
+      else if(res.status==400){
+        this.messageService.showErrorToast(this._vcr,"Service Not Found");
+      }
     })
   }
 
+  //Function will add offers in Wishlist
   addToWishlist(offer1) {
     console.log(offer1);
     let wishlistBean = {
@@ -128,8 +161,14 @@ export class VendorPageComponent implements OnInit {
       "offerValidity":offer1.offerValidity
     }
     this.wishlistService.addToWishlist(wishlistBean).subscribe((res) =>{
-      this.messageService.showSuccessToast(this._vcr,"Added");
-    },(error) =>{
+      this.messageService.showSuccessToast(this._vcr,"Added to Wishlist");
+    },(res:Response) =>{
+      if(res.status==409){
+        this.messageService.showErrorToast(this._vcr,"Already in Wishlist");
+      }
+      else if(res.status==400){
+        this.messageService.showErrorToast(this._vcr,"Service Not Found");
+      }
     })
   }
 

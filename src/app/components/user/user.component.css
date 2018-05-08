@@ -11,11 +11,20 @@
 
 	.active {
 		border: 1px solid #018b8b;
-		/*padding-left: 10px;
-		padding-right: 10px;*/
-		padding-top: 5px;
-		padding-bottom: 5px;
 		width: 210px;
+	}
+
+	.inactive {
+		border-bottom: 1px solid lightgrey;
+	}
+	
+	.active:active,
+	.active:focus,
+	.active.active {
+		background-image: none;
+		outline: 0;
+		-webkit-box-shadow: none;
+		box-shadow: none;
 	}
 }
 

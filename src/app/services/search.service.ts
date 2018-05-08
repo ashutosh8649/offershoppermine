@@ -8,14 +8,11 @@ import 'rxjs/add/operator/switchMap';
 import { HttpClientModule } from '@angular/common/http'; 
 import { HttpModule } from '@angular/http';
 
+import { Search } from '../configs/search.config'
+
 @Injectable()
 export class SearchService {
-  baseUrl: string = 'http://10.151.60.93:8800/q/';
-  baseUrlProduct: string = 'http://10.151.60.93:8800/search-key/';
-  baseUrlCategorySearch : string = "http://10.151.60.93:8800/offerCategories/";
-  baseUrlCategoryProductSearchUrl1 : string = "http://10.151.60.93:8800/offerCategories/";
-  baseUrlCategoryProductSearchUrl2 : string = "search-key/";
-
+  
   public keywords:any=[];
   public products:any=[];
   public defaultKeywords:any=[""];
@@ -23,7 +20,6 @@ export class SearchService {
   constructor(private http: Http) { }
 
   search(terms: Observable<string>) {
-   // alert("this is an alert");
     return terms.debounceTime(100)
       .distinctUntilChanged()
       .switchMap(term => this.searchEntries(term));
@@ -32,13 +28,10 @@ export class SearchService {
   searchEntries(term) {
 
     this.keywords=this.http
-        .get(this.baseUrl + term)
+        .get(Search.baseUrl + term)
         .map(res => res.json(),
         (error: any)=>this.handleError(error));
-        //halert("this is an error alert");
         return this.keywords; 
-
-
     }
 
         private handleError(error: Response){
@@ -48,7 +41,7 @@ export class SearchService {
 
       searchProducts(result){
         this.products=this.http
-        .get(this.baseUrlProduct + result)
+        .get(Search.baseUrlProduct + result)
         .map(res => res.json(),
         (error: any)=>this.handleError(error));
         return this.products; 
@@ -56,7 +49,7 @@ export class SearchService {
 
       searchProductsCategoryOnly(category) {
         this.products=this.http
-        .get(this.baseUrlCategorySearch+category)
+        .get(Search.baseUrlCategorySearch+category)
         .map(res => res.json(),
         (error: any)=>this.handleError(error));
         return this.products;
@@ -64,8 +57,8 @@ export class SearchService {
 
       searchProductsCategoryAndKey(category, key) {
         this.products=this.http
-        .get(this.baseUrlCategoryProductSearchUrl1+category+"/"+
-          this.baseUrlCategoryProductSearchUrl2+key)
+        .get(Search.baseUrlCategoryProductSearchUrl1+category+"/"+
+          Search.baseUrlCategoryProductSearchUrl2+key)
         .map(res => res.json(),
         (error: any)=>this.handleError(error));
         return this.products;
